@@ -20,6 +20,17 @@
     let cJump = true;
     let airTime = 0;
 
+    // this is an object, not an array
+    // example of call: platPosition.x1
+    let platPos = {
+        x1: 600,
+        y1: 400,
+        x2: 50,
+        y2: 250,
+        x3: 750,
+        y3: 220,
+    }
+
     var config = {
         type: Phaser.AUTO,
         width: 800,
@@ -58,12 +69,14 @@
         this.add.image(400, 300, 'sky');
         
         platforms = this.physics.add.staticGroup();
-
+        
+        // main ground
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
-        platforms.create(600, 400, 'ground');
-        platforms.create(50, 250, 'ground');
-        platforms.create(750, 220, 'ground');
+        // other platforms
+        platforms.create(platPos.x1, platPos.y1, 'ground');
+        platforms.create(platPos.x2, platPos.y2, 'ground');
+        platforms.create(platPos.x3, platPos.y3, 'ground');
 
         stars = this.physics.add.group({
             key: 'star',
