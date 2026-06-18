@@ -17,6 +17,8 @@
     var score = 0;
     var scoreText;
     var gameOver = false;
+    let cJump = true;
+    let airTime = 0;
 
     var config = {
         type: Phaser.AUTO,
@@ -77,7 +79,7 @@
 
         this.physics.add.collider(bombs, platforms);
 
-        player = this.physics.add.sprite(100, 450, 'dude');
+        player = this.physics.add.sprite(100, 0, 'dude');
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
 
@@ -143,7 +145,6 @@
 
     function update ()
     {
-
         if (cursors.left.isDown){
             player.setVelocityX(-160);
             player.anims.play('left', true);
@@ -156,8 +157,22 @@
             player.setVelocityX(0);
             player.anims.play('turn', true);
         }
-        if (cursors.up.isDown && player.body.touching.down){
+        if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
             player.setVelocityY(-330);
+            cJump = false;
+        }
+
+        // coyote jump. If player is NOT touching down
+        if (!player.body.touching.down){
+            // coyote jump timer
+            // "=>" go to these commands
+            this.time.delayedCall(50, () => {
+                cJump = false;
+            })
+        }
+
+        if (player.body.touching.down){
+            cJump = true;
         }
     }
     
