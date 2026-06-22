@@ -61,13 +61,20 @@
             'assets/dude.png',
             { frameWidth: 32, frameHeight: 48 }
         );
+        this.load.image('goal', 'assets/goal.png');
     }
 
     function create ()
     {
         
         this.add.image(400, 300, 'sky');
-        
+
+
+        // goal
+        goal = this.physics.add.staticGroup();
+        goal.create(100, 200, 'goal');
+
+        // platforms
         platforms = this.physics.add.staticGroup();
         
         // main ground
@@ -92,7 +99,7 @@
 
         this.physics.add.collider(bombs, platforms);
 
-        player = this.physics.add.sprite(100, 0, 'dude');
+        player = this.physics.add.sprite(100, 300, 'dude');
         player.setBounce(0.2);
         player.setCollideWorldBounds(true);
 
@@ -119,13 +126,24 @@
             repeat: -1
         });
 
+
+        // collision and overlaps
         this.physics.add.collider(player, platforms);
+
+        this.physics.add.overlap(player, goal, goalReached, null, this);
 
         cursors = this.input.keyboard.createCursorKeys();
 
         this.physics.add.overlap(player, stars, collectStar, null, this);
 
         scoreText = this.add.text(16, 16, 'Score: 0', {fontSize: '32px', fill: '#000'})
+    }
+
+    function goalReached(){
+        // 1st statment: collision, 2nd statement: visual
+       platforms.children.iterate(function(platform){
+        platform.disableBody(true, true);
+       });
     }
 
     function collectStar(player, star){
