@@ -33,6 +33,11 @@
         y3: 0,
     }
 
+    let goalPos = {
+        x: 0,
+        y: 0,
+    }
+
     var config = {
         type: Phaser.AUTO,
         width: 800,
@@ -72,13 +77,12 @@
         this.add.image(400, 300, 'sky');
 
 
-        // goal
-        goal = this.physics.add.staticGroup();
-        goal.create(100, 200, 'goal');
+        // goal moved in levelSetup
+        goal = this.physics.add.staticSprite(0, 0, 'goal');
 
         // platforms
         platforms = this.physics.add.staticGroup();
-        spawnPlatforms();
+        levelSetup();
 
         stars = this.physics.add.group({
             key: 'star',
@@ -144,7 +148,7 @@
        });
         level += 1;
         levelText.setText ('Level: ' + level);
-        spawnPlatforms();
+        levelSetup();
         player.setPosition(300, 400);
     }
 
@@ -176,7 +180,7 @@
         gameOver = true;
     }
 
-    function spawnPlatforms(){
+    function levelSetup(){
         // checks level for position
         switch(level){
             case 1:
@@ -186,19 +190,26 @@
                 platPos.y2 = 250;
                 platPos.x3 = 750;
                 platPos.y3 = 220;
+                goal.x = 100;
+                goal.y = 200;
                 break;
             case 2:
-                platPos.x1 = 100;
-                platPos.y1 = 500;
+                platPos.x1 = 0;
+                platPos.y1 = 475;
                 platPos.x2 = 300;
-                platPos.y2 = 100;
+                platPos.y2 = 200;
                 platPos.x3 = 550;
                 platPos.y3 = 350;
+                goal.x = 325;
+                goal.y = 50;
                 break;
             case 3:
 
                 break;
         }
+        // goal
+        goal.setPosition(goal.x, goal.y, 'goal');
+
         // main ground
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
 
@@ -210,6 +221,8 @@
 
     function update ()
     {
+        goal.refreshBody();
+        
         if (cursors.left.isDown){
             player.setVelocityX(-160);
             player.anims.play('left', true);
