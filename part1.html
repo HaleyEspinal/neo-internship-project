@@ -35,6 +35,11 @@
         y: 0,
     }
 
+    let moldPos = {
+        x1: 0,
+        y1: 0,
+    }
+
     let goalPos = {
         x: 0,
         y: 0,
@@ -64,7 +69,9 @@
     {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
-        this.load.image('mushroom', 'assets/mushroom.png')
+        this.load.image('mushroom', 'assets/mushroom.png');
+        this.load.image('mold', 'assets/mold.png');
+        this.load.image('moldEdge', 'assets/moldEdge.png');
         this.load.spritesheet('dude',
             'assets/dude.png',
             { frameWidth: 32, frameHeight: 48 }
@@ -86,6 +93,10 @@
 
         // platforms
         platforms = this.physics.add.staticGroup();
+
+        // mold
+        mold = this.physics.add.staticGroup();
+
         levelSetup();
 
         player = this.physics.add.sprite(100, 300, 'dude');
@@ -150,6 +161,8 @@
                 goalPos.y = 200;
                 mushPos.x = 330;
                 mushPos.y = 525;
+                moldPos.x = 50;
+                moldPos.y = 200;
                 break;
             case 2:
                 platPos.x1 = 0;
@@ -168,7 +181,7 @@
         // goal
         goal.setPosition(goalPos.x, goalPos.y, 'goal');
 
-        //mushroom spring
+        // mushroom spring
         mushroom.setPosition(mushPos.x, mushPos.y, 'mushroom');
 
         // main ground
@@ -178,6 +191,9 @@
         platforms.create(platPos.x1, platPos.y1, 'ground');
         platforms.create(platPos.x2, platPos.y2, 'ground');
         platforms.create(platPos.x3, platPos.y3, 'ground');
+
+        // mold
+        mold.create(moldPos.x1, moldPos.y1, 'mold');
 
         // refresh collison hitboxes
         mushroom.refreshBody();
