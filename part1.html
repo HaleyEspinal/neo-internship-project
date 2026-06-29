@@ -47,7 +47,7 @@
         physics: {
             default: 'arcade',
             arcade: {
-                gravity: { y: 300 },
+                gravity: { y: 550 },
                 debug: false
             }
         },
@@ -89,7 +89,7 @@
         levelSetup();
 
         player = this.physics.add.sprite(100, 300, 'dude');
-        player.setBounce(0.2);
+        player.setBounce(0.15);
         player.setCollideWorldBounds(true);
 
         this.anims.create({
@@ -186,7 +186,7 @@
 
     function springUp(){
         if (player.body.touching.down && mushroom.body.touching.up){
-            player.setVelocityY(-500);
+            player.setVelocityY(-600);
             cJump = false;
         }
     }
@@ -204,8 +204,9 @@
             player.setVelocityX(0);
             player.anims.play('turn', true);
         }
+        // JUMP
         if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
-            player.setVelocityY(-330);
+            player.setVelocityY(-400);
             cJump = false;
         }
 
