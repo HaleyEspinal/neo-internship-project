@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head> 
     <meta charset="UTF-8" />
-    <title>Making your first Phaser 3 Game - Part 1</title>
+    <title>Dust Bunny Adventures</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style type="text/css">
         body {
@@ -13,7 +13,8 @@
 <body>
 
 <script type="text/javascript">
-
+// Test comment for demo
+// 2nd test comment for demo
     var score = 0;
     var scoreText;
     var gameOver = false;
@@ -222,7 +223,7 @@
     function update ()
     {
         goal.refreshBody();
-        
+
         if (cursors.left.isDown){
             player.setVelocityX(-160);
             player.anims.play('left', true);
