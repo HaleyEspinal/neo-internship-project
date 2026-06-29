@@ -115,8 +115,8 @@
 
         // collision and overlaps
         this.physics.add.collider(player, platforms);
-
         this.physics.add.overlap(player, goal, goalReached, null, this);
+        this.physics.add.collider(player, mushroom, springUp, null, this);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -148,8 +148,8 @@
                 platPos.y3 = 220;
                 goalPos.x = 100;
                 goalPos.y = 200;
-                mushPos.x = 150;
-                mushPos.y = 200;
+                mushPos.x = 330;
+                mushPos.y = 525;
                 break;
             case 2:
                 platPos.x1 = 0;
@@ -178,12 +178,20 @@
         platforms.create(platPos.x1, platPos.y1, 'ground');
         platforms.create(platPos.x2, platPos.y2, 'ground');
         platforms.create(platPos.x3, platPos.y3, 'ground');
+
+        // refresh collison hitboxes
+        mushroom.refreshBody();
+        goal.refreshBody();
     }
 
-    function update ()
-    {
-        goal.refreshBody();
+    function springUp(){
+        if (player.body.touching.down && mushroom.body.touching.up){
+            player.setVelocityY(-500);
+            cJump = false;
+        }
+    }
 
+    function update(){
         if (cursors.left.isDown){
             player.setVelocityX(-160);
             player.anims.play('left', true);
