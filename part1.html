@@ -13,8 +13,6 @@
 <body>
 
 <script type="text/javascript">
-// Test comment for demo
-// 2nd test comment for demo
     var gameOver = false;
     let cJump = true;
     let airTime = 0;
@@ -30,6 +28,11 @@
         y2: 0,
         x3: 0,
         y3: 0,
+    }
+
+    let mushPos = {
+        x: 0,
+        y: 0,
     }
 
     let goalPos = {
@@ -61,6 +64,7 @@
     {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
+        this.load.image('mushroom', 'assets/mushroom.png')
         this.load.spritesheet('dude',
             'assets/dude.png',
             { frameWidth: 32, frameHeight: 48 }
@@ -74,8 +78,11 @@
         this.add.image(400, 300, 'sky');
 
 
-        // goal moved in levelSetup
+        // goal
         goal = this.physics.add.staticSprite(0, 0, 'goal');
+
+        //mushroom spring
+        mushroom = this.physics.add.staticSprite(0, 0, 'mushroom');
 
         // platforms
         platforms = this.physics.add.staticGroup();
@@ -141,6 +148,8 @@
                 platPos.y3 = 220;
                 goal.x = 100;
                 goal.y = 200;
+                mushPos.x = 150;
+                mushPos.y = 200;
                 break;
             case 2:
                 platPos.x1 = 0;
@@ -158,6 +167,9 @@
         }
         // goal
         goal.setPosition(goal.x, goal.y, 'goal');
+
+        //mushroom spring
+        mushroom.setPosition(mushPos.x, mushPos.y, 'mushroom');
 
         // main ground
         platforms.create(400, 568, 'ground').setScale(2).refreshBody();
