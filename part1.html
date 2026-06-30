@@ -18,6 +18,8 @@
     let airTime = 0;
     let level = 1;
     let levelText;
+    let safeSpotX;
+    let safeSpotY;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -38,6 +40,10 @@
     let moldPos = {
         x1: 0,
         y1: 0,
+        x2: 0,
+        y2: 0,
+        x3: 0,
+        y3: 0,
     }
 
     let goalPos = {
@@ -128,6 +134,7 @@
         this.physics.add.collider(player, platforms);
         this.physics.add.overlap(player, goal, goalReached, null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
+        this.physics.add.overlap(player, mold, moldTouch, null, this);
 
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -161,8 +168,12 @@
                 goalPos.y = 200;
                 mushPos.x = 330;
                 mushPos.y = 525;
-                moldPos.x = 50;
-                moldPos.y = 200;
+                moldPos.x1 = 600;
+                moldPos.y1 = 385;
+                moldPos.x2 = 624;
+                moldPos.y2 = 385;
+                moldPos.x3 = 648;
+                moldPos.y3 = 385;
                 break;
             case 2:
                 platPos.x1 = 0;
@@ -193,7 +204,9 @@
         platforms.create(platPos.x3, platPos.y3, 'ground');
 
         // mold
-        mold.create(moldPos.x1, moldPos.y1, 'mold');
+        mold.create(moldPos.x1, moldPos.y1, 'moldEdge').setFlipX(true);
+        mold.create(moldPos.x2, moldPos.y2, 'mold');
+        mold.create(moldPos.x3, moldPos.y3, 'moldEdge');
 
         // refresh collison hitboxes
         mushroom.refreshBody();
@@ -205,6 +218,11 @@
             player.setVelocityY(-600);
             cJump = false;
         }
+    }
+
+    function moldTouch(){
+        player.x = safeSpotX;
+        player.y = (safeSpotY-3);
     }
 
     function update(){
@@ -220,6 +238,14 @@
             player.setVelocityX(0);
             player.anims.play('turn', true);
         }
+
+        // SAFESPOT
+        if (player.body.touching.down){
+            safeSpotX = player.x;
+            safeSpotY = player.y;
+        }
+     
+
         // JUMP
         if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
             player.setVelocityY(-400);
