@@ -22,6 +22,8 @@
     let safeSpotY;
     let moldChainA = 3;
     let rightMold;
+    let breakPlat1Touched;
+    let onBreakPlat;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -32,6 +34,11 @@
         y2: 0,
         x3: 0,
         y3: 0,
+    }
+
+    let breakPlatPos = {
+        x1: 0,
+        y1: 0,
     }
 
     let mushPos = {
@@ -77,6 +84,7 @@
     {
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
+        this.load.image('breakPlat', 'assets/breakPlat.png');
         this.load.image('mushroom', 'assets/mushroom.png');
         this.load.image('mold', 'assets/mold.png');
         this.load.image('moldEdge', 'assets/moldEdge.png');
@@ -101,6 +109,9 @@
 
         // platforms
         platforms = this.physics.add.staticGroup();
+
+        // breakaway platforms
+        breakPlat1 = this.physics.add.staticSprite(0, 0, 'breakPlat');
 
         // mold
         mold = this.physics.add.staticGroup();
@@ -134,6 +145,7 @@
 
         // collision and overlaps
         this.physics.add.collider(player, platforms);
+        this.physics.add.collider(player, breakPlat1, breakPlat1Check, null, this);
         this.physics.add.overlap(player, goal, goalReached, null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
         this.physics.add.overlap(player, mold, moldTouch, null, this);
@@ -142,6 +154,11 @@
 
         // text
         levelText = this.add.text(16, 48, 'Level: 1', {fontSize: '32px', fill: '#000'})
+    }
+
+    function breakPlat1Check(){
+        breakPlat1Touched = true;
+        onBreakPlat = true;
     }
 
     function goalReached(){
@@ -166,6 +183,8 @@
                 platPos.y2 = 250;
                 platPos.x3 = 750;
                 platPos.y3 = 150;
+                breakPlatPos.x1 = 277;
+                breakPlatPos.y1 = 258;
                 goalPos.x = 100;
                 goalPos.y = 200;
                 mushPos.x = 330;
@@ -202,6 +221,9 @@
         platforms.create(platPos.x2, platPos.y2, 'ground');
         platforms.create(platPos.x3, platPos.y3, 'ground');
 
+        // breakaway platforms
+        breakPlat1.setPosition(breakPlatPos.x1, breakPlatPos.y1, 'breakPlat');
+
         // mold
         let moldAtexture3 = 'mold';
         let moldAtexture4 = 'mold';
@@ -237,10 +259,11 @@
         }
         if (moldChainA >= 5){
         mold.create(moldPos.x5, moldPos.y, moldAtexture5);
-        lastMold = moldPos.x5;
+        rightMold = moldPos.x5;
         }
 
         // refresh collison hitboxes
+        breakPlat1.refreshBody();
         mushroom.refreshBody();
         goal.refreshBody();
     }
@@ -273,12 +296,11 @@
 
         // SAFESPOT
         // safespot only taken if player is far enough from mold edge
-        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 50)) || (player.x >= (lastMold + 12 + 50)))){
+        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 50)) || (player.x >= (rightMold + 12 + 50)))){
             safeSpotX = player.x;
             safeSpotY = player.y;
         }
      
-
         // JUMP
         if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
             player.setVelocityY(-400);
@@ -289,7 +311,7 @@
         if (!player.body.touching.down){
             // coyote jump timer
             // "=>" go to these commands
-            this.time.delayedCall(50, () => {
+            this.time.delayedCall(100, () => {
                 cJump = false;
             })
         }
@@ -297,6 +319,14 @@
         if (player.body.touching.down){
             cJump = true;
         }
+
+        // BREAKAWAY PLATFORMS
+        if (!onBreakPlat && breakPlat1Touched && 
+        (player.y <= (breakPlat1.y - breakPlat1.height/2 - 30) || (player.x >= (breakPlat1.x + breakPlat1.width/2) || (player.x <= (breakPlat1.x - breakPlat1.width/2))))){
+            breakPlat1.disableBody(true,true);
+        }
+        onBreakPlat = false;
+
     }
     
 
