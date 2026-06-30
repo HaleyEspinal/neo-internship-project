@@ -41,6 +41,11 @@
         y1: 0,
     }
 
+    let colorPlatPos = {
+        blueX1: 0,
+        blueY1: 0,
+    }
+
     let mushPos = {
         x: 0,
         y: 0,
@@ -85,6 +90,7 @@
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
         this.load.image('breakPlat', 'assets/breakPlat.png');
+        this.load.image('colorPlat', 'assets/colorPlat.png');
         this.load.image('mushroom', 'assets/mushroom.png');
         this.load.image('mold', 'assets/mold.png');
         this.load.image('moldEdge', 'assets/moldEdge.png');
@@ -112,6 +118,9 @@
 
         // breakaway platforms
         breakPlat1 = this.physics.add.staticSprite(0, 0, 'breakPlat');
+
+        // color platforms
+        bluePlatforms = this.physics.add.staticGroup();
 
         // mold
         mold = this.physics.add.staticGroup();
@@ -146,6 +155,7 @@
         // collision and overlaps
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(player, breakPlat1, breakPlat1Check, null, this);
+        this.physics.add.collider(player, bluePlatforms);
         this.physics.add.overlap(player, goal, goalReached, null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
         this.physics.add.overlap(player, mold, moldTouch, null, this);
@@ -185,6 +195,8 @@
                 platPos.y3 = 150;
                 breakPlatPos.x1 = 277;
                 breakPlatPos.y1 = 258;
+                colorPlatPos.blueX1 = 300;
+                colorPlatPos.blueY1 = 300;
                 goalPos.x = 100;
                 goalPos.y = 200;
                 mushPos.x = 330;
@@ -223,6 +235,9 @@
 
         // breakaway platforms
         breakPlat1.setPosition(breakPlatPos.x1, breakPlatPos.y1, 'breakPlat');
+
+        // color platforms
+        bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
 
         // mold
         let moldAtexture3 = 'mold';
