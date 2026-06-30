@@ -24,6 +24,7 @@
     let rightMold;
     let breakPlat1Touched;
     let onBreakPlat;
+    let colorBlue = true;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -160,10 +161,13 @@
         this.physics.add.collider(player, mushroom, springUp, null, this);
         this.physics.add.overlap(player, mold, moldTouch, null, this);
 
+        // keyboard inputs
         cursors = this.input.keyboard.createCursorKeys();
+        zeroKey = this.input.keyboard.addKey('ZERO');
 
         // text
         levelText = this.add.text(16, 48, 'Level: 1', {fontSize: '32px', fill: '#000'})
+        testText = this.add.text(16, 24, 'Blue: ', {fontSize: '32px', fill: '#000'})
     }
 
     function breakPlat1Check(){
@@ -195,8 +199,8 @@
                 platPos.y3 = 150;
                 breakPlatPos.x1 = 277;
                 breakPlatPos.y1 = 258;
-                colorPlatPos.blueX1 = 300;
-                colorPlatPos.blueY1 = 300;
+                colorPlatPos.blueX1 = 170;
+                colorPlatPos.blueY1 = 420;
                 goalPos.x = 100;
                 goalPos.y = 200;
                 mushPos.x = 330;
@@ -237,7 +241,7 @@
         breakPlat1.setPosition(breakPlatPos.x1, breakPlatPos.y1, 'breakPlat');
 
         // color platforms
-        bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
+        colorPlatforms();
 
         // mold
         let moldAtexture3 = 'mold';
@@ -281,6 +285,16 @@
         breakPlat1.refreshBody();
         mushroom.refreshBody();
         goal.refreshBody();
+    }
+
+    function colorPlatforms(){
+        bluePlatforms.clear(true, true);
+        if (colorBlue === true){
+            bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
+        } else {
+            bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff);
+            collider.destroy(player, bluePlatforms);
+        }
     }
 
     function springUp(){
@@ -344,6 +358,13 @@
         }
         onBreakPlat = false;
 
+        // TESTS
+        if (Phaser.Input.Keyboard.JustDown(zeroKey)){
+            colorBlue = !colorBlue;
+            colorPlatforms();
+        }
+
+        testText.setText ('Blue: ' + colorBlue);
     }
     
 
