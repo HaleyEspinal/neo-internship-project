@@ -21,6 +21,7 @@
     let safeSpotX;
     let safeSpotY;
     let moldChainA = 3;
+    let rightMold;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -164,7 +165,7 @@
                 platPos.x2 = 50;
                 platPos.y2 = 250;
                 platPos.x3 = 750;
-                platPos.y3 = 220;
+                platPos.y3 = 150;
                 goalPos.x = 100;
                 goalPos.y = 200;
                 mushPos.x = 330;
@@ -229,11 +230,14 @@
         mold.create(moldPos.x1, moldPos.y, 'moldEdge').setFlipX(true);
         mold.create(moldPos.x2, moldPos.y, 'mold');
         mold.create(moldPos.x3, moldPos.y, moldAtexture3);
+        rightMold = moldPos.x3;
         if (moldChainA >= 4){
         mold.create(moldPos.x4, moldPos.y, moldAtexture4);
+        rightMold = moldPos.x4;
         }
         if (moldChainA >= 5){
         mold.create(moldPos.x5, moldPos.y, moldAtexture5);
+        lastMold = moldPos.x5;
         }
 
         // refresh collison hitboxes
@@ -268,7 +272,8 @@
         }
 
         // SAFESPOT
-        if (player.body.touching.down){
+        // safespot only taken if player is far enough from mold edge
+        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 50)) || (player.x >= (lastMold + 12 + 50)))){
             safeSpotX = player.x;
             safeSpotY = player.y;
         }
