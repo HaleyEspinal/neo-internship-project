@@ -20,6 +20,7 @@
     let levelText;
     let safeSpotX;
     let safeSpotY;
+    let moldChainA = 3;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -38,12 +39,12 @@
     }
 
     let moldPos = {
+        y: 0,
         x1: 0,
-        y1: 0,
         x2: 0,
-        y2: 0,
         x3: 0,
-        y3: 0,
+        x4: 0,
+        x5: 0,
     }
 
     let goalPos = {
@@ -169,11 +170,8 @@
                 mushPos.x = 330;
                 mushPos.y = 525;
                 moldPos.x1 = 600;
-                moldPos.y1 = 385;
-                moldPos.x2 = 624;
-                moldPos.y2 = 385;
-                moldPos.x3 = 648;
-                moldPos.y3 = 385;
+                moldPos.y = 385;
+                moldChainA = 5;
                 break;
             case 2:
                 platPos.x1 = 0;
@@ -204,9 +202,39 @@
         platforms.create(platPos.x3, platPos.y3, 'ground');
 
         // mold
-        mold.create(moldPos.x1, moldPos.y1, 'moldEdge').setFlipX(true);
-        mold.create(moldPos.x2, moldPos.y2, 'mold');
-        mold.create(moldPos.x3, moldPos.y3, 'moldEdge');
+        let moldAtexture3 = 'mold';
+        let moldAtexture4 = 'mold';
+        let moldAtexture5 = 'mold';
+
+        moldPos.x2 = (moldPos.x1 + 24);
+        moldPos.x3 = (moldPos.x2 + 24);
+        moldPos.x4 = (moldPos.x3 + 24);
+        moldPos.x5 = (moldPos.x4 + 24);
+
+        if (moldChainA <= 3){
+            moldAtexture3 = 'moldEdge';
+        } else {
+            moldAtexture3 = 'mold';
+        }
+        if (moldChainA === 4){
+            moldAtexture4 = 'moldEdge';
+        } else {
+            moldAtexture4 = 'mold';
+        }
+        if (moldChainA >= 5){
+            moldAtexture5 = 'moldEdge';
+        } else {
+            moldAtexture5 = 'mold';
+        }
+        mold.create(moldPos.x1, moldPos.y, 'moldEdge').setFlipX(true);
+        mold.create(moldPos.x2, moldPos.y, 'mold');
+        mold.create(moldPos.x3, moldPos.y, moldAtexture3);
+        if (moldChainA >= 4){
+        mold.create(moldPos.x4, moldPos.y, moldAtexture4);
+        }
+        if (moldChainA >= 5){
+        mold.create(moldPos.x5, moldPos.y, moldAtexture5);
+        }
 
         // refresh collison hitboxes
         mushroom.refreshBody();
