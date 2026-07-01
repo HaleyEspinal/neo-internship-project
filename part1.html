@@ -25,6 +25,7 @@
     let breakPlat1Touched;
     let onBreakPlat;
     let colorBlue = true;
+    let blueCollider;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -126,8 +127,6 @@
         // mold
         mold = this.physics.add.staticGroup();
 
-        levelSetup();
-
         player = this.physics.add.sprite(100, 300, 'dude');
         player.setBounce(0.15);
         player.setCollideWorldBounds(true);
@@ -156,7 +155,7 @@
         // collision and overlaps
         this.physics.add.collider(player, platforms);
         this.physics.add.collider(player, breakPlat1, breakPlat1Check, null, this);
-        this.physics.add.collider(player, bluePlatforms);
+        blueCollider = this.physics.add.collider(player, bluePlatforms);
         this.physics.add.overlap(player, goal, goalReached, null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
         this.physics.add.overlap(player, mold, moldTouch, null, this);
@@ -168,6 +167,8 @@
         // text
         levelText = this.add.text(16, 48, 'Level: 1', {fontSize: '32px', fill: '#000'})
         testText = this.add.text(16, 24, 'Blue: ', {fontSize: '32px', fill: '#000'})
+
+        levelSetup();
     }
 
     function breakPlat1Check(){
@@ -290,10 +291,11 @@
     function colorPlatforms(){
         bluePlatforms.clear(true, true);
         if (colorBlue === true){
+            blueCollider.active = true;
             bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
         } else {
+            blueCollider.active = false;
             bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff);
-            collider.destroy(player, bluePlatforms);
         }
     }
 
