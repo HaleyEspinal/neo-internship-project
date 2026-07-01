@@ -118,7 +118,7 @@
         // platforms
         platforms = this.physics.add.staticGroup();
 
-        // breakaway platforms
+        // breakaway platforms created
         breakPlat1 = this.physics.add.staticSprite(0, 0, 'breakPlat');
 
         // color platforms
@@ -180,12 +180,23 @@
         // runs once per child
        platforms.children.iterate(function(platform){
         // 1st statment: collision, 2nd statement: visual
-        platform.disableBody(true, true);
+            platform.disableBody(true, true);
+       });
+        mold.children.iterate(function(mold){
+            mold.disableBody(true, true);
+       });
+        bluePlatforms.children.iterate(function(bluePlatforms){
+            bluePlatforms.disableBody(true, true);
        });
         level += 1;
         levelText.setText ('Level: ' + level);
         levelSetup();
         player.setPosition(300, 400);
+        safeSpotX = player.x;
+        safeSpotY = player.y;
+
+        // re-enables the breakaway platform, 0 0 is ignored because of first parameter
+        breakPlat1.enableBody(false, 0, 0, true, true);
     }
 
     function levelSetup(){
@@ -217,8 +228,17 @@
                 platPos.y2 = 200;
                 platPos.x3 = 550;
                 platPos.y3 = 350;
+                breakPlatPos.x1 = 325;
+                breakPlatPos.y1 = 125;
+                colorPlatPos.blueX1 = 570;
+                colorPlatPos.blueY1 = 235;
                 goalPos.x = 325;
                 goalPos.y = 50;
+                mushPos.x = 30;
+                mushPos.y = 445;
+                moldChainA = 3;
+                moldPos.x1 = 120;
+                moldPos.y = 185;
                 break;
             case 3:
 
