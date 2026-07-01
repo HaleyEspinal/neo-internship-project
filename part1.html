@@ -373,8 +373,14 @@
         }
 
         // BREAKAWAY PLATFORMS
+        // -30 accounts for bounce
         if (!onBreakPlat && breakPlat1Touched && 
-        (player.y <= (breakPlat1.y - breakPlat1.height/2 - 30) || (player.x >= (breakPlat1.x + breakPlat1.width/2) || (player.x <= (breakPlat1.x - breakPlat1.width/2))))){
+        (player.y <= (breakPlat1.y - breakPlat1.height/2 - 30) || 
+        player.y >= (breakPlat1.x + breakPlat1.width/2) ||
+        player.x >= (breakPlat1.x + breakPlat1.width/2) || 
+        player.x <= (breakPlat1.x - breakPlat1.width/2)
+        )
+        ){
             breakPlat1.disableBody(true,true);
             breakPlat1Touched = false;
         }
