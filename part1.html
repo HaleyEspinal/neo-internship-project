@@ -139,7 +139,7 @@
         });
 
         this.anims.create({
-            key: 'turn',
+            key: 'front',
             frames: [ { key: 'bunny', frame: 4 } ],
             frameRate: 20
         });
@@ -343,7 +343,7 @@
         }
         else{
             player.setVelocityX(0);
-            player.anims.play('turn', true);
+            player.anims.play('front', true);
         }
 
         // SAFESPOT
