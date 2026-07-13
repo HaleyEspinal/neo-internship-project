@@ -18,6 +18,7 @@
     let airTime = 0;
     let level = 1;
     let levelText;
+    let cursorText;
     let safeSpotX;
     let safeSpotY;
     let moldChainA = 3;
@@ -72,7 +73,7 @@
         // factor of 216 for resolution 16 by 9 ratio
         width: 3456,
         height: 1944,
-        backgroundColor: '0x4287f5',
+        backgroundColor: '0x120c06',
         physics: {
             default: 'arcade',
             arcade: {
@@ -133,7 +134,7 @@
         // mold
         mold = this.physics.add.staticGroup();
 
-        player = this.physics.add.sprite(100, 300, 'bunny');
+        player = this.physics.add.sprite(1700, 1700, 'bunny');
         player.setBounce(0.15);
         player.setCollideWorldBounds(true);
 
@@ -171,8 +172,10 @@
         zeroKey = this.input.keyboard.addKey('ZERO');
 
         // text
-        levelText = this.add.text(16, 48, 'Level: 1', {fontSize: '32px', fill: '#000'})
-        testText = this.add.text(16, 24, 'Blue: ', {fontSize: '32px', fill: '#000'})
+        testText = this.add.text(16, 20, 'Blue: ', {fontSize: '32px', fill: '#ffffff'})
+        levelText = this.add.text(16, 50, 'Level: 1', {fontSize: '32px', fill: '#ffffff'})
+        cursorText = this.add.text(16, 80, 'Mouse: ', {fontSize: '32px', fill: '#ffffff'})
+        
 
         levelSetup();
     }
@@ -209,20 +212,20 @@
         // checks level for position
         switch(level){
             case 1:
-                platPos.x1 = 600;
-                platPos.y1 = 400;
-                platPos.x2 = 50;
-                platPos.y2 = 250;
-                platPos.x3 = 750;
-                platPos.y3 = 150;
+                platPos.x1 = 2286;
+                platPos.y1 = 1635;
+                platPos.x2 = 1640;
+                platPos.y2 = 1540;
+                platPos.x3 = 2210;
+                platPos.y3 = 1400;
                 breakPlatPos.x1 = 277;
                 breakPlatPos.y1 = 258;
                 colorPlatPos.blueX1 = 170;
                 colorPlatPos.blueY1 = 420;
                 goalPos.x = 100;
                 goalPos.y = 200;
-                mushPos.x = 330;
-                mushPos.y = 525;
+                mushPos.x = 1920;
+                mushPos.y = 1725;
                 moldPos.x1 = 500;
                 moldPos.y = 385;
                 moldChainA = 5;
@@ -257,7 +260,7 @@
         mushroom.setPosition(mushPos.x, mushPos.y, 'mushroom');
 
         // main ground
-        platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+        platforms.create(2018, 1756, 'ground').setDisplaySize(936, 40).refreshBody();
 
         // other platforms
         platforms.create(platPos.x1, platPos.y1, 'ground');
@@ -399,6 +402,7 @@
         }
 
         testText.setText ('Blue: ' + colorBlue);
+        cursorText.setText ('Mouse: ' + this.input.activePointer.x + ', ' + this.input.activePointer.y)
     }
     
 
