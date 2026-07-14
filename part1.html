@@ -29,6 +29,9 @@
     let blueCollider;
     let leverInt = false;
     let leverDir = 'right';
+    let leverRtype = 0;
+    let leverLtype = 0;
+    let enDoubleJump = false;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -120,6 +123,9 @@
         this.load.spritesheet('lever', 'assets/lever.png',
             {frameWidth: 96, frameHeight: 96}
         );
+        this.load.spritesheet('leverIcon', '/assets/leverIcons.png',
+            {frameWidth: 32, frameHeight: 32}
+        );
     }
 
     function create ()
@@ -150,11 +156,18 @@
         // lever
         lever = this.physics.add.staticSprite(0, 0, 'lever');
         lever.setDepth(1);
+        leverIconL = this.physics.add.staticSprite(0, 0, 'leverIcon');
+        leverIconL.setFrame(0);
+        leverIconL.setDepth(2);
+        leverIconR = this.physics.add.staticSprite(0, 0, 'leverIcon');
+        leverIconR.setFrame(0);
+        leverIconR.setDepth(2);
+
 
         player = this.physics.add.sprite(1700, 1700, 'bunny');
         player.setBounce(0.15);
         player.setCollideWorldBounds(true);
-        player.setDepth(2);
+        player.setDepth(5);
 
         this.anims.create({
             key: 'left',
@@ -175,19 +188,6 @@
             frameRate: 10,
             repeat: -1
         });
-
-        this.anims.create({
-            key: 'leverLeft',
-            frames: [ { key: 'lever', frame: 1 } ],
-            frameRate: 20
-        });
-
-        this.anims.create({
-            key: 'leverRight',
-            frames: [ { key: 'lever', frame: 0 } ],
-            frameRate: 20
-        });
-
 
         // collision and overlaps
         this.physics.add.collider(player, platforms);
@@ -214,6 +214,21 @@
     function breakPlat1Check(){
         breakPlat1Touched = true;
         onBreakPlat = true;
+    }
+
+    function leverFlipped(){
+    //    if (leverDir = 'left'){
+    //     switch(leverLtype){
+    //         case 0:
+    //             enDoubleJump = true;
+    //             break;
+    //         case 1:
+    //             break;
+    //     }
+    //    }
+    //    else{
+
+    //    }
     }
 
     function goalReached(){
@@ -263,6 +278,8 @@
                 moldChainA = 5;
                 leverPos.x = 1500;
                 leverPos.y = 1513;
+                leverRtype = 1;
+                leverLtype = 0;
                 break;
             case 2:
                 playerPos.x = 2020;
@@ -352,6 +369,10 @@
 
         //EXTERNAL
         lever.setPosition(leverPos.x, leverPos.y, 'lever');
+        leverIconL.setPosition(leverPos.x-29, leverPos.y+31, 'leverIcon');
+        leverIconL.setFrame(leverLtype);
+        leverIconR.setPosition(leverPos.x+29, leverPos.y+31, 'leverIcon');
+        leverIconR.setFrame(leverRtype);
 
         // refresh collison hitboxes
         breakPlat1.refreshBody();
@@ -456,13 +477,14 @@
 
         if (leverInt === true && Phaser.Input.Keyboard.JustDown(enterKey)){
             if (leverDir === 'right'){
-                lever.anims.play('leverLeft', true);
+                lever.setFrame(1);
                 leverDir = 'left';
             }
             else if (leverDir === 'left'){
-                lever.anims.play('leverRight', true);
+                lever.setFrame(0);
                 leverDir = 'right';
             }
+            leverFlipped();
         }
 
 
