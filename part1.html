@@ -27,6 +27,8 @@
     let onBreakPlat;
     let colorBlue = true;
     let blueCollider;
+    let leverInt = false;
+    let leverDir = 'right';
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -174,6 +176,18 @@
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'leverLeft',
+            frames: [ { key: 'lever', frame: 1 } ],
+            frameRate: 20
+        });
+
+        this.anims.create({
+            key: 'leverRight',
+            frames: [ { key: 'lever', frame: 0 } ],
+            frameRate: 20
+        });
+
 
         // collision and overlaps
         this.physics.add.collider(player, platforms);
@@ -186,6 +200,7 @@
         // keyboard inputs
         cursors = this.input.keyboard.createCursorKeys();
         zeroKey = this.input.keyboard.addKey('ZERO');
+        enterKey = this.input.keyboard.addKey('ENTER');
 
         // text
         testText = this.add.text(16, 20, 'Blue: ', {fontSize: '32px', fill: '#ffffff'})
@@ -421,6 +436,35 @@
             breakPlat1Touched = false;
         }
         onBreakPlat = false;
+
+        // LEVER PROXIMITY
+        if (player.x <= (lever.x+lever.width/2 + 10) &&
+            player.x >= (lever.x-lever.width/2 - 10) &&
+            player.y <= (lever.y+lever.height/2) &&
+            player.y >= (lever.y-lever.height/2 - 20)
+            ){
+                leverInt = true;
+            }
+            else{
+                lever.clearTint();
+                leverInt = false;
+            }
+
+        if (leverInt === true){
+            lever.setTint('0xffe799');
+        }
+
+        if (leverInt === true && Phaser.Input.Keyboard.JustDown(enterKey)){
+            if (leverDir === 'right'){
+                lever.anims.play('leverLeft', true);
+                leverDir = 'left';
+            }
+            else if (leverDir === 'left'){
+                lever.anims.play('leverRight', true);
+                leverDir = 'right';
+            }
+        }
+
 
         // TESTS
         if (Phaser.Input.Keyboard.JustDown(zeroKey)){
