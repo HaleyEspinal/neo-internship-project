@@ -68,6 +68,11 @@
         y: 0,
     }
 
+    let playerPos = {
+        x: 0,
+        y: 0,
+    }
+
     var config = {
         type: Phaser.AUTO,
         // factor of 216 for resolution 16 by 9 ratio
@@ -200,7 +205,6 @@
         level += 1;
         levelText.setText ('Level: ' + level);
         levelSetup();
-        player.setPosition(300, 400);
         safeSpotX = player.x;
         safeSpotY = player.y;
 
@@ -212,47 +216,54 @@
         // checks level for position
         switch(level){
             case 1:
+                playerPos.x = 1700;
+                playerPos.y = 1700;
                 platPos.x1 = 2286;
                 platPos.y1 = 1635;
                 platPos.x2 = 1640;
                 platPos.y2 = 1540;
                 platPos.x3 = 2210;
                 platPos.y3 = 1400;
-                breakPlatPos.x1 = 277;
-                breakPlatPos.y1 = 258;
-                colorPlatPos.blueX1 = 170;
-                colorPlatPos.blueY1 = 420;
-                goalPos.x = 100;
-                goalPos.y = 200;
+                breakPlatPos.x1 = 1868;
+                breakPlatPos.y1 = 1532;
+                colorPlatPos.blueX1 = 1724;
+                colorPlatPos.blueY1 = 1654;
+                goalPos.x = 1684;
+                goalPos.y = 1443;
                 mushPos.x = 1920;
                 mushPos.y = 1725;
-                moldPos.x1 = 500;
-                moldPos.y = 385;
+                moldPos.x1 = 2200;
+                moldPos.y = 1618;
                 moldChainA = 5;
                 break;
             case 2:
-                platPos.x1 = 0;
-                platPos.y1 = 475;
-                platPos.x2 = 300;
-                platPos.y2 = 200;
-                platPos.x3 = 550;
-                platPos.y3 = 350;
-                breakPlatPos.x1 = 325;
-                breakPlatPos.y1 = 125;
-                colorPlatPos.blueX1 = 570;
-                colorPlatPos.blueY1 = 235;
-                goalPos.x = 325;
-                goalPos.y = 50;
-                mushPos.x = 30;
-                mushPos.y = 445;
+                playerPos.x = 2020;
+                playerPos.y = 1700;
+                platPos.x1 = 1686;
+                platPos.y1 = 1650;
+                platPos.x2 = 2340;
+                platPos.y2 = 1650;
+                platPos.x3 = 2025;
+                platPos.y3 = 1450;
+                breakPlatPos.x1 = 2328;
+                breakPlatPos.y1 = 1532;
+                colorPlatPos.blueX1 = 2252;
+                colorPlatPos.blueY1 = 1442;
+                goalPos.x = 2025;
+                goalPos.y = 1350;
+                mushPos.x = 1770;
+                mushPos.y = 1620;
+                moldPos.x1 = 1840;
+                moldPos.y = 1433;
                 moldChainA = 3;
-                moldPos.x1 = 120;
-                moldPos.y = 185;
                 break;
             case 3:
 
                 break;
         }
+        // move player
+        player.setPosition(playerPos.x, playerPos.y);
+
         // goal
         goal.setPosition(goalPos.x, goalPos.y, 'goal');
 
