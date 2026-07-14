@@ -30,6 +30,11 @@
 
     // this is an object, not an array
     // example of call: platPosition.x1
+    let playerPos = {
+        x: 0,
+        y: 0,
+    }
+
     let platPos = {
         x1: 0,
         y1: 0,
@@ -68,7 +73,7 @@
         y: 0,
     }
 
-    let playerPos = {
+    let leverPos = {
         x: 0,
         y: 0,
     }
@@ -110,6 +115,9 @@
             { frameWidth: 40, frameHeight: 32 }
         );
         this.load.image('goal', 'assets/goal.png');
+        this.load.spritesheet('lever', 'assets/lever.png',
+            {frameWidth: 96, frameHeight: 96}
+        );
     }
 
     function create ()
@@ -118,8 +126,6 @@
         // this.add.image(0, 0, 'projRef').setOrigin(0,0).setScale(2.16); 
         let sky = this.add.image(2018, 1532, 'sky').setDisplaySize(936, 487);
         // sky.setTint('0xffffff').setAlpha(0.5);
-
-
 
         // goal
         goal = this.physics.add.staticSprite(0, 0, 'goal');
@@ -139,9 +145,14 @@
         // mold
         mold = this.physics.add.staticGroup();
 
+        // lever
+        lever = this.physics.add.staticSprite(0, 0, 'lever');
+        lever.setDepth(1);
+
         player = this.physics.add.sprite(1700, 1700, 'bunny');
         player.setBounce(0.15);
         player.setCollideWorldBounds(true);
+        player.setDepth(2);
 
         this.anims.create({
             key: 'left',
@@ -235,6 +246,8 @@
                 moldPos.x1 = 2200;
                 moldPos.y = 1618;
                 moldChainA = 5;
+                leverPos.x = 1500;
+                leverPos.y = 1513;
                 break;
             case 2:
                 playerPos.x = 2020;
@@ -321,6 +334,9 @@
         mold.create(moldPos.x5, moldPos.y, moldAtexture5);
         rightMold = moldPos.x5;
         }
+
+        //EXTERNAL
+        lever.setPosition(leverPos.x, leverPos.y, 'lever');
 
         // refresh collison hitboxes
         breakPlat1.refreshBody();
