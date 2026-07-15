@@ -25,16 +25,20 @@
     let rightMold;
     let breakPlat1Touched;
     let onBreakPlat;
-    let colorBlue = true;
     let blueCollider;
     let leverInt = false;
     let leverDir = 'right';
     let leverRtype = 0;
     let leverLtype = 0;
-    let enDoubleJump = false;
 
     // this is an object, not an array
     // example of call: platPosition.x1
+    let extRules = {
+        doubleJump: false,
+        colorBlue: false,
+        lowGav: false,
+    }
+
     let playerPos = {
         x: 0,
         y: 0,
@@ -217,19 +221,20 @@
     }
 
     function leverFlipped(){
-    //    if (leverDir = 'left'){
-    //     switch(leverLtype){
-    //         case 0:
-    //             enDoubleJump = true;
-    //             break;
-    //         case 1:
-    //             break;
-    //     }
-    //    }
-    //    else{
-
-    //    }
-    }
+        // changes all extRules to false. "key" could be any word
+        for (let key in extRules){
+            extRules[key] = false;
+        }
+       
+        // if leverDir === left ?, then use leverIconL, else: use leverIconR
+        switch(leverDir === 'left' ? leverIconL : leverIconR){
+            case 0:
+                extRules.doubleJump = true;
+                break;
+            case 1:
+                break;
+        }
+       }
 
     function goalReached(){
         // runs once per child
@@ -382,7 +387,7 @@
 
     function colorPlatforms(){
         bluePlatforms.clear(true, true);
-        if (colorBlue === true){
+        if (extRules.colorBlue === true){
             blueCollider.active = true;
             bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
         } else {
@@ -490,11 +495,11 @@
 
         // TESTS
         if (Phaser.Input.Keyboard.JustDown(zeroKey)){
-            colorBlue = !colorBlue;
+            extRules.colorBlue = !extRules.colorBlue;
             colorPlatforms();
         }
 
-        testText.setText ('Blue: ' + colorBlue);
+        testText.setText ('Blue: ' + extRules.colorBlue);
         cursorText.setText ('Mouse: ' + this.input.activePointer.x + ', ' + this.input.activePointer.y)
     }
     
