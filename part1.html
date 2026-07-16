@@ -28,8 +28,10 @@
     let blueCollider;
     let leverInt = false;
     let leverDir = 'right';
-    let leverRtype = 0;
-    let leverLtype = 0;
+    let leverTypeL = 0;
+    let leverTypeR = 0;
+    let doubleJumpAv = false;
+    let doubleJumpStop = true;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -227,7 +229,7 @@
         }
        
         // if leverDir === left ?, then use leverIconL, else: use leverIconR
-        switch(leverDir === 'left' ? leverIconL : leverIconR){
+        switch(leverDir === 'left' ? leverTypeL : leverTypeR){
             case 0:
                 extRules.doubleJump = true;
                 break;
@@ -283,8 +285,8 @@
                 moldChainA = 5;
                 leverPos.x = 1500;
                 leverPos.y = 1513;
-                leverRtype = 1;
-                leverLtype = 0;
+                leverTypeL = 0;
+                leverTypeR = 1;
                 break;
             case 2:
                 playerPos.x = 2020;
@@ -375,9 +377,9 @@
         //EXTERNAL
         lever.setPosition(leverPos.x, leverPos.y, 'lever');
         leverIconL.setPosition(leverPos.x-29, leverPos.y+31, 'leverIcon');
-        leverIconL.setFrame(leverLtype);
+        leverIconL.setFrame(leverTypeL);
         leverIconR.setPosition(leverPos.x+29, leverPos.y+31, 'leverIcon');
-        leverIconR.setFrame(leverRtype);
+        leverIconR.setFrame(leverTypeR);
 
         // refresh collison hitboxes
         breakPlat1.refreshBody();
@@ -436,6 +438,18 @@
             cJump = false;
         }
 
+        if (extRules.doubleJump && cursors.up.isUp && !player.body.touching.down){
+            doubleJumpAv = true;
+        }
+
+        // DOUBLE JUMP
+        if (cursors.up.isDown && !player.body.touching.down && doubleJumpAv && !doubleJumpStop){
+            player.setVelocityY(-400);
+            cJump = false;
+            doubleJumpAv = false;
+            doubleJumpStop = true;
+        }
+
         // coyote jump. If player is NOT touching down
         if (!player.body.touching.down){
             // coyote jump timer
@@ -447,6 +461,8 @@
 
         if (player.body.touching.down){
             cJump = true;
+            doubleJumpAv = false;
+            doubleJumpStop = false;
         }
 
         // BREAKAWAY PLATFORMS
@@ -500,7 +516,9 @@
         }
 
         testText.setText ('Blue: ' + extRules.colorBlue);
-        cursorText.setText ('Mouse: ' + this.input.activePointer.x + ', ' + this.input.activePointer.y)
+        cursorText.setText ('Mouse: ' + this.input.activePointer.x + ', ' + this.input.activePointer.y);
+
+        console.log('extRules.doubleJump', extRules.doubleJump, doubleJumpAv);
     }
     
 
