@@ -215,6 +215,7 @@
         
 
         levelSetup();
+        leverFlipped();
     }
 
     function breakPlat1Check(){
@@ -234,8 +235,10 @@
                 extRules.doubleJump = true;
                 break;
             case 1:
+                extRules.colorBlue = true;
                 break;
         }
+        colorPlatCheck();
        }
 
     function goalReached(){
@@ -334,7 +337,7 @@
         breakPlat1.setPosition(breakPlatPos.x1, breakPlatPos.y1, 'breakPlat');
 
         // color platforms
-        colorPlatforms();
+        colorPlatCheck();
 
         // mold
         let moldAtexture3 = 'mold';
@@ -387,7 +390,7 @@
         goal.refreshBody();
     }
 
-    function colorPlatforms(){
+    function colorPlatCheck(){
         bluePlatforms.clear(true, true);
         if (extRules.colorBlue === true){
             blueCollider.active = true;
@@ -512,7 +515,7 @@
         // TESTS
         if (Phaser.Input.Keyboard.JustDown(zeroKey)){
             extRules.colorBlue = !extRules.colorBlue;
-            colorPlatforms();
+            colorPlatCheck();
         }
 
         testText.setText ('Blue: ' + extRules.colorBlue);
