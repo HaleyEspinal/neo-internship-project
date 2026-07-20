@@ -32,6 +32,7 @@
     let leverTypeR = 0;
     let doubleJumpAv = false;
     let doubleJumpStop = true;
+    let sky;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -99,7 +100,7 @@
             default: 'arcade',
             arcade: {
                 gravity: { y: 550 },
-                debug: true
+                debug: false
             }
         },
         scene: {
@@ -138,7 +139,7 @@
     {
         //scale to match resolution ratio
         // this.add.image(0, 0, 'projRef').setOrigin(0,0).setScale(2.16); 
-        let sky = this.add.image(2018, 1532, 'sky').setDisplaySize(936, 487);
+        sky = this.add.image(2018, 1532, 'sky').setDisplaySize(936, 487);
         // sky.setTint('0xffffff').setAlpha(0.5);
 
         // goal
@@ -259,74 +260,78 @@
         // checks level for position
         switch(level){
             case 1:
-                playerPos.x = 1700;
-                playerPos.y = 1700;
-                platPos.x1 = 2286;
-                platPos.y1 = 1635;
-                platPos.x2 = 1640;
-                platPos.y2 = 1540;
-                platPos.x3 = 2210;
-                platPos.y3 = 1400;
-                breakPlatPos.x1 = 1868;
-                breakPlatPos.y1 = 1532;
-                colorPlatPos.blueX1 = 1724;
-                colorPlatPos.blueY1 = 1654;
-                goalPos.x = 1684;
-                goalPos.y = 1443;
-                mushPos.x = 1920;
-                mushPos.y = 1725;
-                moldPos.x1 = 2200;
-                moldPos.y = 1618;
+                playerPos.x = -300;
+                playerPos.y = 180;
+                platPos.x1 = 270;
+                platPos.y1 = 103;
+                platPos.x2 = 200;
+                platPos.y2 = -60;
+                platPos.x3 = -390;
+                platPos.y3 = 9;
+                breakPlatPos.x1 = -162;
+                breakPlatPos.y1 = 1;
+                colorPlatPos.blueX1 = -320;
+                colorPlatPos.blueY1 = 120;
+                goalPos.x = -350;
+                goalPos.y = -100;
+                mushPos.x = -100;
+                mushPos.y = 190;
+                moldPos.x1 = 150;
+                moldPos.y = 87;
                 moldChainA = 5;
-                leverPos.x = 1500;
-                leverPos.y = 1513;
+                leverPos.x = -530;
+                leverPos.y = -20;
                 leverTypeL = 0;
                 leverTypeR = 1;
                 break;
             case 2:
-                playerPos.x = 2020;
-                playerPos.y = 1700;
-                platPos.x1 = 1686;
-                platPos.y1 = 1650;
-                platPos.x2 = 2340;
-                platPos.y2 = 1650;
-                platPos.x3 = 2025;
-                platPos.y3 = 1450;
-                breakPlatPos.x1 = 2328;
-                breakPlatPos.y1 = 1532;
-                colorPlatPos.blueX1 = 2252;
-                colorPlatPos.blueY1 = 1442;
-                goalPos.x = 2025;
-                goalPos.y = 1350;
-                mushPos.x = 1770;
-                mushPos.y = 1620;
-                moldPos.x1 = 1840;
-                moldPos.y = 1433;
+                playerPos.x = 0;
+                playerPos.y = 180;
+                platPos.x1 = -300;
+                platPos.y1 = 100;
+                platPos.x2 = 300;
+                platPos.y2 = 100;
+                platPos.x3 = 0;
+                platPos.y3 = -100;
+                breakPlatPos.x1 = 400;
+                breakPlatPos.y1 = 20;
+                colorPlatPos.blueX1 = 300;
+                colorPlatPos.blueY1 = -50;
+                goalPos.x = 0;
+                goalPos.y = -190;
+                mushPos.x = -220;
+                mushPos.y = 70;
+                moldPos.x1 = -170;
+                moldPos.y = -115;
                 moldChainA = 3;
+                leverPos.x = 520;
+                leverPos.y = 70;
+                leverTypeL = 0;
+                leverTypeR = 1;
                 break;
             case 3:
 
                 break;
         }
         // move player
-        player.setPosition(playerPos.x, playerPos.y);
+        player.setPosition(sky.x + playerPos.x, sky.y + playerPos.y);
 
         // goal
-        goal.setPosition(goalPos.x, goalPos.y, 'goal');
+        goal.setPosition(sky.x + goalPos.x, sky.y + goalPos.y, 'goal');
 
         // mushroom spring
-        mushroom.setPosition(mushPos.x, mushPos.y, 'mushroom');
+        mushroom.setPosition(sky.x + mushPos.x, sky.y + mushPos.y, 'mushroom');
 
         // main ground
-        platforms.create(2018, 1756, 'ground').setDisplaySize(936, 40).refreshBody();
+        platforms.create(sky.x, (sky.y + sky.displayHeight/2 - 20), 'ground').setDisplaySize(936, 40).refreshBody();
 
         // other platforms
-        platforms.create(platPos.x1, platPos.y1, 'ground');
-        platforms.create(platPos.x2, platPos.y2, 'ground');
-        platforms.create(platPos.x3, platPos.y3, 'ground');
+        platforms.create(sky.x + platPos.x1, sky.y + platPos.y1, 'ground');
+        platforms.create(sky.x + platPos.x2, sky.y + platPos.y2, 'ground');
+        platforms.create(sky.x + platPos.x3, sky.y + platPos.y3, 'ground');
 
         // breakaway platforms
-        breakPlat1.setPosition(breakPlatPos.x1, breakPlatPos.y1, 'breakPlat');
+        breakPlat1.setPosition(sky.x + breakPlatPos.x1, sky.y + breakPlatPos.y1, 'breakPlat');
 
         // color platforms
         colorPlatCheck();
@@ -356,24 +361,24 @@
         } else {
             moldAtexture5 = 'mold';
         }
-        mold.create(moldPos.x1, moldPos.y, 'moldEdge').setFlipX(true);
-        mold.create(moldPos.x2, moldPos.y, 'mold');
-        mold.create(moldPos.x3, moldPos.y, moldAtexture3);
+        mold.create(sky.x + moldPos.x1, sky.y + moldPos.y, 'moldEdge').setFlipX(true);
+        mold.create(sky.x + moldPos.x2, sky.y + moldPos.y, 'mold');
+        mold.create(sky.x + moldPos.x3, sky.y + moldPos.y, moldAtexture3);
         rightMold = moldPos.x3;
         if (moldChainA >= 4){
-        mold.create(moldPos.x4, moldPos.y, moldAtexture4);
+        mold.create(sky.x + moldPos.x4, sky.y + moldPos.y, moldAtexture4);
         rightMold = moldPos.x4;
         }
         if (moldChainA >= 5){
-        mold.create(moldPos.x5, moldPos.y, moldAtexture5);
+        mold.create(sky.x + moldPos.x5, sky.y + moldPos.y, moldAtexture5);
         rightMold = moldPos.x5;
         }
 
         //EXTERNAL
-        lever.setPosition(leverPos.x, leverPos.y, 'lever');
-        leverIconL.setPosition(leverPos.x-29, leverPos.y+31, 'leverIcon');
+        lever.setPosition(sky.x + leverPos.x, sky.y + leverPos.y, 'lever');
+        leverIconL.setPosition(sky.x + leverPos.x-29, sky.y + leverPos.y+31, 'leverIcon');
         leverIconL.setFrame(leverTypeL);
-        leverIconR.setPosition(leverPos.x+29, leverPos.y+31, 'leverIcon');
+        leverIconR.setPosition(sky.x + leverPos.x+29, sky.y + leverPos.y+31, 'leverIcon');
         leverIconR.setFrame(leverTypeR);
 
         // refresh collison hitboxes
@@ -386,10 +391,10 @@
         bluePlatforms.clear(true, true);
         if (extRules.colorBlue === true){
             blueCollider.active = true;
-            bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
+            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
         } else {
             blueCollider.active = false;
-            bluePlatforms.create(colorPlatPos.blueX1, colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff);
+            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff);
         }
     }
 
