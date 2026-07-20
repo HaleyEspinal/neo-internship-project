@@ -99,7 +99,7 @@
             default: 'arcade',
             arcade: {
                 gravity: { y: 550 },
-                debug: false
+                debug: true
             }
         },
         scene: {
@@ -242,17 +242,9 @@
        }
 
     function goalReached(){
-        // runs once per child
-       platforms.children.iterate(function(platform){
-        // 1st statment: collision, 2nd statement: visual
-            platform.disableBody(true, true);
-       });
-        mold.children.iterate(function(mold){
-            mold.disableBody(true, true);
-       });
-        bluePlatforms.children.iterate(function(bluePlatforms){
-            bluePlatforms.disableBody(true, true);
-       });
+        platforms.clear(true, true);
+        mold.clear(true, true);
+        bluePlatforms.clear(true, true);
         level += 1;
         levelText.setText ('Level: ' + level);
         levelSetup();
