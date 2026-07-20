@@ -1,7 +1,8 @@
 {
   "scripts": {
     "start": "http-server -p 8080",
-    "dev": "http-server -p 8080 -o /part1.html"
+    "dev": "http-server -p 8080 -o /part1.html",
+    "edit": "http-server -p 8080 -o /levelEdit.html"
   },
   "dependencies": {
     "http-server": "^14.1.1"
