@@ -11,3 +11,232 @@
     </style>
 </head>
 <body>
+<script type="text/javascript">
+    let playerPos = {
+        x: 0,
+        y: 0,
+    }
+
+    let platPos = {
+        x1: 0,
+        y1: 0,
+        x2: 0,
+        y2: 0,
+        x3: 0,
+        y3: 0,
+    }
+
+    let breakPlatPos = {
+        x1: 0,
+        y1: 0,
+    }
+
+    let colorPlatPos = {
+        blueX1: 0,
+        blueY1: 0,
+    }
+
+    let mushPos = {
+        x: 0,
+        y: 0,
+    }
+
+    let moldPos = {
+        y: 0,
+        x1: 0,
+        x2: 0,
+        x3: 0,
+        x4: 0,
+        x5: 0,
+    }
+
+    let goalPos = {
+        x: 0,
+        y: 0,
+    }
+
+    let leverPos = {
+        x: 0,
+        y: 0,
+    }
+
+    var config = {
+        type: Phaser.AUTO,
+        // factor of 216 for resolution 16 by 9 ratio
+        width: 3456,
+        height: 1944,
+        backgroundColor: '0x120c06',
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 550 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    var game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.image('projRef', 'projectionRef.jpg')
+        this.load.image('sky', 'assets/sky.png');
+        this.load.image('ground', 'assets/platform.png');
+        this.load.image('breakPlat', 'assets/breakPlat.png');
+        this.load.image('colorPlat', 'assets/colorPlat.png');
+        this.load.image('mushroom', 'assets/mushroom.png');
+        this.load.image('mold', 'assets/mold.png');
+        this.load.image('moldEdge', 'assets/moldEdge.png');
+        this.load.spritesheet('bunny',
+            'assets/bunny.png',
+            { frameWidth: 40, frameHeight: 32 }
+        );
+        this.load.image('goal', 'assets/goal.png');
+        this.load.spritesheet('lever', 'assets/lever.png',
+            {frameWidth: 96, frameHeight: 96}
+        );
+        this.load.spritesheet('leverIcon', '/assets/leverIcons.png',
+            {frameWidth: 32, frameHeight: 32}
+        );
+    }
+
+    function create ()
+    {
+        sky = this.add.image(config.width / 2, config.height / 2, 'sky').setDisplaySize(936, 487);
+
+        playerPos.x = -300;
+        playerPos.y = 180;
+        platPos.x1 = 270;
+        platPos.y1 = 103;
+        platPos.x2 = 200;
+        platPos.y2 = -60;
+        platPos.x3 = -390;
+        platPos.y3 = 9;
+        breakPlatPos.x1 = -162;
+        breakPlatPos.y1 = 1;
+        colorPlatPos.blueX1 = -320;
+        colorPlatPos.blueY1 = 120;
+        goalPos.x = -350;
+        goalPos.y = -100;
+        mushPos.x = -100;
+        mushPos.y = 190;
+        moldPos.x1 = 150;
+        moldPos.y = 87;
+        moldChainA = 5;
+        leverPos.x = -530;
+        leverPos.y = -20;
+        leverTypeL = 0;
+        leverTypeR = 1;
+
+        //player
+        player = this.add.sprite(1700, 1700, 'bunny');
+        player.setInteractive();
+        this.input.setDraggable(player);
+        this.input.on('drag', function (pointer, gameObject, dragX, dragY){
+            gameObject.x = dragX;
+            gameObject.y = dragY;
+        })
+
+        // goal
+        goal = this.add.sprite(0, 0, 'goal');
+
+        //mushroom spring
+        mushroom = this.add.sprite(0, 0, 'mushroom');
+
+        // platforms
+        platforms = this.add.group();
+
+        // breakaway platforms created
+        breakPlat1 = this.add.sprite(0, 0, 'breakPlat');
+
+        // color platforms
+        bluePlatforms = this.add.group();
+
+        // mold
+        mold = this.add.group();
+
+        // lever
+        lever = this.add.sprite(0, 0, 'lever');
+        lever.setDepth(1);
+        leverIconL = this.add.sprite(0, 0, 'leverIcon');
+        leverIconL.setFrame(0);
+        leverIconL.setDepth(2);
+        leverIconR = this.add.sprite(0, 0, 'leverIcon');
+        leverIconR.setFrame(0);
+        leverIconR.setDepth(2);
+        
+        // move player
+        player.setPosition(sky.x + playerPos.x, sky.y + playerPos.y);
+
+        // goal
+        goal.setPosition(sky.x + goalPos.x, sky.y + goalPos.y, 'goal');
+
+        // mushroom spring
+        mushroom.setPosition(sky.x + mushPos.x, sky.y + mushPos.y, 'mushroom');
+
+        // main ground
+        platforms.create(sky.x, (sky.y + sky.displayHeight/2 - 20), 'ground').setDisplaySize(936, 40);
+
+        // other platforms
+        platforms.create(sky.x + platPos.x1, sky.y + platPos.y1, 'ground');
+        platforms.create(sky.x + platPos.x2, sky.y + platPos.y2, 'ground');
+        platforms.create(sky.x + platPos.x3, sky.y + platPos.y3, 'ground');
+
+        // breakaway platforms
+        breakPlat1.setPosition(sky.x + breakPlatPos.x1, sky.y + breakPlatPos.y1, 'breakPlat');
+
+        // color platforms
+        bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
+
+        // mold
+        let moldAtexture3 = 'mold';
+        let moldAtexture4 = 'mold';
+        let moldAtexture5 = 'mold';
+
+        moldPos.x2 = (moldPos.x1 + 24);
+        moldPos.x3 = (moldPos.x2 + 24);
+        moldPos.x4 = (moldPos.x3 + 24);
+        moldPos.x5 = (moldPos.x4 + 24);
+
+        if (moldChainA <= 3){
+            moldAtexture3 = 'moldEdge';
+        } else {
+            moldAtexture3 = 'mold';
+        }
+        if (moldChainA === 4){
+            moldAtexture4 = 'moldEdge';
+        } else {
+            moldAtexture4 = 'mold';
+        }
+        if (moldChainA >= 5){
+            moldAtexture5 = 'moldEdge';
+        } else {
+            moldAtexture5 = 'mold';
+        }
+        mold.create(sky.x + moldPos.x1, sky.y + moldPos.y, 'moldEdge').setFlipX(true);
+        mold.create(sky.x + moldPos.x2, sky.y + moldPos.y, 'mold');
+        mold.create(sky.x + moldPos.x3, sky.y + moldPos.y, moldAtexture3);
+        rightMold = moldPos.x3;
+        if (moldChainA >= 4){
+        mold.create(sky.x + moldPos.x4, sky.y + moldPos.y, moldAtexture4);
+        rightMold = moldPos.x4;
+        }
+        if (moldChainA >= 5){
+        mold.create(sky.x + moldPos.x5, sky.y + moldPos.y, moldAtexture5);
+        rightMold = moldPos.x5;
+        }
+    }
+
+    function update ()
+    {
+
+    }
+
+</script>
+</body>
+</html>
