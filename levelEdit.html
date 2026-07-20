@@ -12,7 +12,13 @@
 </head>
 <body>
 <script type="text/javascript">
-    let testText;
+    let playerText;
+    let breakPlatText;
+    let bluePlatText;
+    let mushText;
+    let moldText;
+    let goalText;
+    let leverText;
 
     let playerPos = {
         x: 0,
@@ -111,135 +117,82 @@
     {
         sky = this.add.image(config.width / 2, config.height / 2, 'sky').setDisplaySize(936, 487);
 
-        playerPos.x = -300;
-        playerPos.y = 180;
-        platPos.x1 = 270;
-        platPos.y1 = 103;
-        platPos.x2 = 200;
-        platPos.y2 = -60;
-        platPos.x3 = -390;
-        platPos.y3 = 9;
-        breakPlatPos.x1 = -162;
-        breakPlatPos.y1 = 1;
-        colorPlatPos.blueX1 = -320;
-        colorPlatPos.blueY1 = 120;
-        goalPos.x = -350;
-        goalPos.y = -100;
-        mushPos.x = -100;
-        mushPos.y = 190;
-        moldPos.x1 = 150;
-        moldPos.y = 87;
-        moldChainA = 5;
-        leverPos.x = -530;
-        leverPos.y = -20;
-        leverTypeL = 0;
-        leverTypeR = 1;
-
         //player
-        player = this.add.sprite(1700, 1700, 'bunny');
+        player = this.add.sprite(500, 500, 'bunny');
         player.setInteractive();
         this.input.setDraggable(player);
+
+        // goal
+        goal = this.add.sprite(400, 300, 'goal');
+        goal.setInteractive();
+        this.input.setDraggable(goal);
+
+        //mushroom spring
+        mushroom = this.add.sprite(400, 350, 'mushroom');
+        mushroom.setInteractive();
+        this.input.setDraggable(mushroom);
+
+        // platforms
+        platforms = this.add.sprite(400, 400, 'ground');
+        platforms.setInteractive();
+        this.input.setDraggable(platforms);
+
+        // breakaway platforms created
+        breakPlat = this.add.sprite(400, 450, 'breakPlat');
+        breakPlat.setInteractive();
+        this.input.setDraggable(breakPlat);
+
+        // color platforms
+        bluePlatform = this.add.sprite(400, 500, 'colorPlat').setTint(0x0062ff);
+        bluePlatform.setInteractive();
+        this.input.setDraggable(bluePlatform);
+
+        // mold
+        mold = this.add.sprite(400, 550, 'moldEdge');
+        mold.setInteractive();
+        this.input.setDraggable(mold);
+
+        // lever
+        lever = this.add.sprite(200, 325, 'lever');
+        lever.setInteractive();
+        this.input.setDraggable(lever);
+        lever.setDepth(1);
+        leverIconL = this.add.sprite(300, 300, 'leverIcon');
+        leverIconL.setInteractive();
+        this.input.setDraggable(leverIconL);
+        leverIconL.setFrame(0);
+        leverIconL.setDepth(2);
+        leverIconR = this.add.sprite(300, 350, 'leverIcon');
+        leverIconR.setInteractive();
+        this.input.setDraggable(leverIconR);
+        leverIconR.setFrame(0);
+        leverIconR.setDepth(2);
+        
+        // DRAGGING
         this.input.on('drag', function (pointer, gameObject, dragX, dragY){
             gameObject.x = dragX;
             gameObject.y = dragY;
         })
 
-        // goal
-        goal = this.add.sprite(0, 0, 'goal');
-
-        //mushroom spring
-        mushroom = this.add.sprite(0, 0, 'mushroom');
-
-        // platforms
-        platforms = this.add.group();
-
-        // breakaway platforms created
-        breakPlat1 = this.add.sprite(0, 0, 'breakPlat');
-
-        // color platforms
-        bluePlatforms = this.add.group();
-
-        // mold
-        mold = this.add.group();
-
-        // lever
-        lever = this.add.sprite(0, 0, 'lever');
-        lever.setDepth(1);
-        leverIconL = this.add.sprite(0, 0, 'leverIcon');
-        leverIconL.setFrame(0);
-        leverIconL.setDepth(2);
-        leverIconR = this.add.sprite(0, 0, 'leverIcon');
-        leverIconR.setFrame(0);
-        leverIconR.setDepth(2);
-        
-        // move player
-        player.setPosition(sky.x + playerPos.x, sky.y + playerPos.y);
-
-        // goal
-        goal.setPosition(sky.x + goalPos.x, sky.y + goalPos.y, 'goal');
-
-        // mushroom spring
-        mushroom.setPosition(sky.x + mushPos.x, sky.y + mushPos.y, 'mushroom');
-
-        // main ground
-        platforms.create(sky.x, (sky.y + sky.displayHeight/2 - 20), 'ground').setDisplaySize(936, 40);
-
-        // other platforms
-        platforms.create(sky.x + platPos.x1, sky.y + platPos.y1, 'ground');
-        platforms.create(sky.x + platPos.x2, sky.y + platPos.y2, 'ground');
-        platforms.create(sky.x + platPos.x3, sky.y + platPos.y3, 'ground');
-
-        // breakaway platforms
-        breakPlat1.setPosition(sky.x + breakPlatPos.x1, sky.y + breakPlatPos.y1, 'breakPlat');
-
-        // color platforms
-        bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
-
-        // mold
-        let moldAtexture3 = 'mold';
-        let moldAtexture4 = 'mold';
-        let moldAtexture5 = 'mold';
-
-        moldPos.x2 = (moldPos.x1 + 24);
-        moldPos.x3 = (moldPos.x2 + 24);
-        moldPos.x4 = (moldPos.x3 + 24);
-        moldPos.x5 = (moldPos.x4 + 24);
-
-        if (moldChainA <= 3){
-            moldAtexture3 = 'moldEdge';
-        } else {
-            moldAtexture3 = 'mold';
-        }
-        if (moldChainA === 4){
-            moldAtexture4 = 'moldEdge';
-        } else {
-            moldAtexture4 = 'mold';
-        }
-        if (moldChainA >= 5){
-            moldAtexture5 = 'moldEdge';
-        } else {
-            moldAtexture5 = 'mold';
-        }
-        mold.create(sky.x + moldPos.x1, sky.y + moldPos.y, 'moldEdge').setFlipX(true);
-        mold.create(sky.x + moldPos.x2, sky.y + moldPos.y, 'mold');
-        mold.create(sky.x + moldPos.x3, sky.y + moldPos.y, moldAtexture3);
-        rightMold = moldPos.x3;
-        if (moldChainA >= 4){
-        mold.create(sky.x + moldPos.x4, sky.y + moldPos.y, moldAtexture4);
-        rightMold = moldPos.x4;
-        }
-        if (moldChainA >= 5){
-        mold.create(sky.x + moldPos.x5, sky.y + moldPos.y, moldAtexture5);
-        rightMold = moldPos.x5;
-        }
-
         // TEXT
-        testText = this.add.text(1255, 500, 'Player: ' + player.x + ',' + player.y, {fontSize: '32px', fill: '#ffffff'})
+        playerText = this.add.text(1255, 500, 'Player: ' + player.x + ',' + player.y, {fontSize: '24px', fill: '#ffffff'})
+        breakPlatText = this.add.text(1255, 450, 'Breakaway Platform: ' + breakPlat.x + ',' + breakPlat.y, {fontSize: '24px', fill: '#ffffff'})
+        bluePlatText = this.add.text(1255, 400, 'Blue Platform: ' + bluePlatform.x + ',' + bluePlatform.y, {fontSize: '24px', fill: '#ffffff'})
+        mushText = this.add.text(1255, 350, 'Mushroom: ' + mushroom.x + ',' + mushroom.y, {fontSize: '24px', fill: '#ffffff'})
+        moldText = this.add.text(1255, 300, 'Mold: ' + mold.x + ',' + mold.y, {fontSize: '24px', fill: '#ffffff'})
+        goalText = this.add.text(1255, 250, 'Goal: ' + goal.x + ',' + goal.y, {fontSize: '24px', fill: '#ffffff'})
+        leverText = this.add.text(1255, 200, 'Lever: ' + lever.x + ',' + lever.y, {fontSize: '24px', fill: '#ffffff'})
     }
 
     function update ()
     {
-        testText.setText('Player: ' + (player.x - sky.x) + ',' + (player.y - sky.y));
+        playerText.setText('Player: ' + (player.x - sky.x) + ',' + (player.y - sky.y));
+        breakPlatText.setText('Breakaway Platform: ' + (breakPlat.x - sky.x) + ',' + (breakPlat.y - sky.y));
+        bluePlatText.setText('Blue Platform: ' + (bluePlatform.x - sky.x) + ',' + (bluePlatform.y - sky.y));
+        mushText.setText('Mushroom: ' + (mushroom.x - sky.x) + ',' + (mushroom.y - sky.y));
+        moldText.setText('Mold: ' + (mold.x - sky.x) + ',' + (mold.y - sky.y));
+        goalText.setText('Goal: ' + (goal.x - sky.x) + ',' + (goal.y - sky.y));
+        leverText.setText('Lever: ' + (lever.x - sky.x) + ',' + (lever.y - sky.y));
     }
 
 </script>
