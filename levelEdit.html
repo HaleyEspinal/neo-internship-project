@@ -12,6 +12,8 @@
 </head>
 <body>
 <script type="text/javascript">
+    let testText;
+
     let playerPos = {
         x: 0,
         y: 0,
@@ -230,11 +232,14 @@
         mold.create(sky.x + moldPos.x5, sky.y + moldPos.y, moldAtexture5);
         rightMold = moldPos.x5;
         }
+
+        // TEXT
+        testText = this.add.text(1255, 500, 'Player: ' + player.x + ',' + player.y, {fontSize: '32px', fill: '#ffffff'})
     }
 
     function update ()
     {
-
+        testText.setText('Player: ' + (player.x - sky.x) + ',' + (player.y - sky.y));
     }
 
 </script>
