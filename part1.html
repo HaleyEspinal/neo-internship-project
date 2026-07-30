@@ -47,13 +47,30 @@
         y: 0,
     }
 
+    let platSize = {
+        w1: 300,
+        h1: 25,
+        w2: 300,
+        h2: 25,
+        w3: 236,
+        h3: 25,
+        w4: 300,
+        h4: 25,
+        w5: 300,
+        h5: 25,
+    }
+
     let platPos = {
         x1: 0,
-        y1: 0,
+        y1: -900,
         x2: 0,
-        y2: 0,
+        y2: -900,
         x3: 0,
-        y3: 0,
+        y3: -900,
+        x4: 0,
+        y4: -900,
+        x5: 0,
+        y5: -900,
     }
 
     let breakPlatPos = {
@@ -161,7 +178,7 @@
         // mold
         mold = this.physics.add.staticGroup();
 
-        // exterior backdrop
+        // exterior backdrop [REMOVE TO TEST]
         extBkr = this.add.image(sky.x, sky.y, 'extBkr');
         extBkr.setDepth(1);
 
@@ -253,9 +270,20 @@
         bluePlatforms.clear(true, true);
         level += 1;
         levelText.setText ('Level: ' + level);
+
+        // resets platform sizes to default
+        platSize.w1 = 300;
+        platSize.h1 = 25;
+        platSize.w2 = 300;
+        platSize.h2 = 25;
+        platSize.w3 = 300;
+        platSize.h3 = 25;
+
         levelSetup();
         safeSpotX = player.x;
         safeSpotY = player.y;
+        
+ 
 
         // re-enables the breakaway platform, 0 0 is ignored because of first parameter
         breakPlat1.enableBody(false, 0, 0, true, true);
@@ -267,6 +295,12 @@
             case 1:
                 playerPos.x = -300;
                 playerPos.y = 180;
+                platSize.w1 = 300;
+                platSize.h1 = 25;
+                platSize.w2 = 300;
+                platSize.h2 = 25;
+                platSize.w3 = 200;
+                platSize.h3 = 25;
                 platPos.x1 = 270;
                 platPos.y1 = 103;
                 platPos.x2 = 200;
@@ -282,7 +316,7 @@
                 mushPos.x = -100;
                 mushPos.y = 190;
                 moldPos.x1 = 150;
-                moldPos.y = 87;
+                moldPos.y = 90;
                 moldChainA = 5;
                 leverPos.x = -630;
                 leverPos.y = -40;
@@ -306,8 +340,8 @@
                 goalPos.y = -190;
                 mushPos.x = -220;
                 mushPos.y = 70;
-                moldPos.x1 = -170;
-                moldPos.y = -115;
+                moldPos.x1 = -130;
+                moldPos.y = -112;
                 moldChainA = 3;
                 leverPos.x = 620;
                 leverPos.y = 70;
@@ -331,9 +365,11 @@
         platforms.create(sky.x, (sky.y + sky.displayHeight/2 - 20), 'ground').setDisplaySize(936, 40).refreshBody();
 
         // other platforms
-        platforms.create(sky.x + platPos.x1, sky.y + platPos.y1, 'ground');
-        platforms.create(sky.x + platPos.x2, sky.y + platPos.y2, 'ground');
-        platforms.create(sky.x + platPos.x3, sky.y + platPos.y3, 'ground');
+        plat1 = platforms.create(sky.x + platPos.x1, sky.y + platPos.y1, 'ground').setDisplaySize(platSize.w1, platSize.h1).refreshBody();
+        plat2 = platforms.create(sky.x + platPos.x2, sky.y + platPos.y2, 'ground').setDisplaySize(platSize.w2, platSize.h2).refreshBody();
+        plat3 = platforms.create(sky.x + platPos.x3, sky.y + platPos.y3, 'ground').setDisplaySize(platSize.w3, platSize.h3).refreshBody();
+        plat4 = platforms.create(sky.x + platPos.x4, sky.y + platPos.y4, 'ground').setDisplaySize(platSize.w4, platSize.h4).refreshBody();
+        plat5 = platforms.create(sky.x + platPos.x5, sky.y + platPos.y5, 'ground').setDisplaySize(platSize.w5, platSize.h5).refreshBody();
 
         // breakaway platforms
         breakPlat1.setPosition(sky.x + breakPlatPos.x1, sky.y + breakPlatPos.y1, 'breakPlat');
@@ -435,6 +471,13 @@
         if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 50)) || (player.x >= (rightMold + 12 + 50))) && !breakPlat1Touched){
             safeSpotX = player.x;
             safeSpotY = player.y;
+        }
+
+        // FALLS IN PIT
+        if (player.y >= (sky.y + sky.displayHeight/2)){
+            player.x = safeSpotX;
+            player.y = (safeSpotY-5);
+            player.setVelocityY(0);
         }
      
         // JUMP
