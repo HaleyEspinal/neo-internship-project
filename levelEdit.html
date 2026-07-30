@@ -133,9 +133,23 @@
         this.input.setDraggable(mushroom);
 
         // platforms
-        platforms = this.add.sprite(400, 400, 'ground');
-        platforms.setInteractive();
-        this.input.setDraggable(platforms);
+        platform1 = this.add.sprite(800, 100, 'ground');
+        platform1.setInteractive();
+        this.input.setDraggable(platform1);
+        platform2 = this.add.sprite(800, 200, 'ground');
+        platform2.setInteractive();
+        this.input.setDraggable(platform2);
+        platform3 = this.add.sprite(800, 300, 'ground');
+        platform3.setInteractive();
+        this.input.setDraggable(platform3);
+        platform4 = this.add.sprite(800, 400, 'ground');
+        platform4.setInteractive();
+        this.input.setDraggable(platform4);
+        platform5 = this.add.sprite(800, 500, 'ground');
+        platform5.setInteractive();
+        this.input.setDraggable(platform5);
+        
+        
 
         // breakaway platforms created
         breakPlat = this.add.sprite(400, 450, 'breakPlat');
@@ -151,6 +165,14 @@
         mold = this.add.sprite(400, 550, 'moldEdge');
         mold.setInteractive();
         this.input.setDraggable(mold);
+        mold2 = this.add.sprite(mold.x+16, mold.y, 'mold');
+        mold3 = this.add.sprite(mold.x+32, mold.y, 'moldEdge');
+        mold4 = this.add.sprite(mold.x+48, mold.y, 'moldEdge');
+        mold4.setInteractive();
+        this.input.setDraggable(mold4);
+        mold5 = this.add.sprite(mold.x+64, mold.y, 'moldEdge');
+        mold5.setInteractive();
+        this.input.setDraggable(mold5);
 
         // lever
         lever = this.add.sprite(200, 325, 'lever');
@@ -175,6 +197,11 @@
         })
 
         // TEXT
+        plat1Text = this.add.text(1755, 200, 'Platform 1: ' + platform1.x + ',' + platform1.y, {fontSize: '24px', fill: '#ffffff'})
+        plat2Text = this.add.text(1755, 250, 'Platform 2: ' + platform2.x + ',' + platform2.y, {fontSize: '24px', fill: '#ffffff'})
+        plat3Text = this.add.text(1755, 300, 'Platform 3: ' + platform3.x + ',' + platform3.y, {fontSize: '24px', fill: '#ffffff'})
+        plat4Text = this.add.text(1755, 350, 'Platform 4: ' + platform4.x + ',' + platform4.y, {fontSize: '24px', fill: '#ffffff'})
+        plat5Text = this.add.text(1755, 400, 'Platform 5: ' + platform5.x + ',' + platform5.y, {fontSize: '24px', fill: '#ffffff'})
         playerText = this.add.text(1255, 500, 'Player: ' + player.x + ',' + player.y, {fontSize: '24px', fill: '#ffffff'})
         breakPlatText = this.add.text(1255, 450, 'Breakaway Platform: ' + breakPlat.x + ',' + breakPlat.y, {fontSize: '24px', fill: '#ffffff'})
         bluePlatText = this.add.text(1255, 400, 'Blue Platform: ' + bluePlatform.x + ',' + bluePlatform.y, {fontSize: '24px', fill: '#ffffff'})
@@ -186,6 +213,14 @@
 
     function update ()
     {
+        mold2.setPosition(mold.x+16, mold.y);
+        mold3.setPosition(mold.x+32, mold.y);
+
+        plat1Text.setText('Platform 1: ' + (platform1.x - sky.x) + ',' + (platform1.y - sky.y));
+        plat2Text.setText('Platform 2: ' + (platform2.x - sky.x) + ',' + (platform2.y - sky.y));
+        plat3Text.setText('Platform 3: ' + (platform3.x - sky.x) + ',' + (platform3.y - sky.y));
+        plat4Text.setText('Platform 4: ' + (platform4.x - sky.x) + ',' + (platform4.y - sky.y));
+        plat5Text.setText('Platform 5: ' + (platform5.x - sky.x) + ',' + (platform5.y - sky.y));
         playerText.setText('Player: ' + (player.x - sky.x) + ',' + (player.y - sky.y));
         breakPlatText.setText('Breakaway Platform: ' + (breakPlat.x - sky.x) + ',' + (breakPlat.y - sky.y));
         bluePlatText.setText('Blue Platform: ' + (bluePlatform.x - sky.x) + ',' + (bluePlatform.y - sky.y));
