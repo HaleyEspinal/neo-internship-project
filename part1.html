@@ -27,11 +27,12 @@
     let onBreakPlat;
     let blueCollider;
     let leverInt = false;
-    let leverDir = 'right';
+    let leverDir = 'up';
     let leverTypeD = 0;
     let leverTypeU = 0;
     let doubleJumpAv = false;
     let doubleJumpStop = true;
+    let shrinkLatch = false;
     let sky;
 
     // this is an object, not an array
@@ -39,7 +40,7 @@
     let extRules = {
         doubleJump: false,
         colorBlue: false,
-        lowGav: false,
+        shrink: false,
     }
 
     let playerPos = {
@@ -193,8 +194,8 @@
         leverIconU.setDepth(2);
 
         // player
-        player = this.physics.add.sprite(1700, 1700, 'bunny');
-        player.setBounce(0.15);
+        player = this.physics.add.sprite(1700, 1700, 'bunny').setScale(1.5);
+        player.setBounce(0);
         player.setCollideWorldBounds(true);
         player.setDepth(5);
 
@@ -247,20 +248,34 @@
     }
 
     function leverFlipped(){
+
+        // checked if switch is about to make the player grow from a shrunk size
+        if (shrinkLatch === true){
+            player.y -= 15;
+            player.setBounce(0);
+            shrinkLatch = false;
+        }
+
         // changes all extRules to false. "key" could be any word
         for (let key in extRules){
             extRules[key] = false;
         }
        
         // if leverDir === left ?, then use leverIconD, else: use leverIconU
-        switch(leverDir === 'left' ? leverTypeD : leverTypeU){
+        switch(leverDir === 'down' ? leverTypeD : leverTypeU){
             case 0:
                 extRules.doubleJump = true;
                 break;
             case 1:
                 extRules.colorBlue = true;
+                break; 
+            case 2:
+                extRules.shrink = true;
+                shrinkLatch = true;
+                player.setBounce(0.1);
                 break;
         }
+
         colorPlatCheck();
        }
 
@@ -271,6 +286,8 @@
         level += 1;
         levelText.setText ('Level: ' + level);
 
+        lever
+
         // resets platform sizes to default
         platSize.w1 = 300;
         platSize.h1 = 25;
@@ -280,6 +297,7 @@
         platSize.h3 = 25;
 
         levelSetup();
+        leverFlipped();
         safeSpotX = player.x;
         safeSpotY = player.y;
         
@@ -299,13 +317,13 @@
                 platSize.h1 = 25;
                 platSize.w2 = 300;
                 platSize.h2 = 25;
-                platSize.w3 = 200;
+                platSize.w3 = 250;
                 platSize.h3 = 25;
                 platPos.x1 = 270;
                 platPos.y1 = 103;
                 platPos.x2 = 200;
                 platPos.y2 = -60;
-                platPos.x3 = -390;
+                platPos.x3 = -450;
                 platPos.y3 = 9;
                 breakPlatPos.x1 = -162;
                 breakPlatPos.y1 = 1;
@@ -345,8 +363,8 @@
                 moldChainA = 3;
                 leverPos.x = 620;
                 leverPos.y = 70;
-                leverTypeD = 0;
-                leverTypeU = 1;
+                leverTypeD = 2;
+                leverTypeU = 0;
                 break;
             case 3:
 
@@ -416,6 +434,8 @@
         }
 
         //EXTERNAL
+        leverDir = 'up';
+        lever.setFrame(0);
         lever.setPosition(sky.x + leverPos.x, sky.y + leverPos.y, 'lever');
         leverIconD.setPosition(sky.x + leverPos.x, sky.y + leverPos.y+100, 'leverIcon');
         leverIconD.setFrame(leverTypeD);
@@ -490,6 +510,13 @@
             doubleJumpAv = true;
         }
 
+        // SHRINK
+        if (extRules.shrink){
+            player.setScale(1);
+        } else {
+            player.setScale(1.5);
+        }
+
         // DOUBLE JUMP
         if (cursors.up.isDown && !player.body.touching.down && doubleJumpAv && !doubleJumpStop){
             player.setVelocityY(-400);
@@ -545,13 +572,13 @@
         }
 
         if (leverInt === true && Phaser.Input.Keyboard.JustDown(enterKey)){
-            if (leverDir === 'right'){
+            if (leverDir === 'up'){
                 lever.setFrame(1);
-                leverDir = 'left';
+                leverDir = 'down';
             }
-            else if (leverDir === 'left'){
+            else if (leverDir === 'down'){
                 lever.setFrame(0);
-                leverDir = 'right';
+                leverDir = 'up';
             }
             leverFlipped();
         }
