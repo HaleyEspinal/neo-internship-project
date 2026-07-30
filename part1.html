@@ -28,8 +28,8 @@
     let blueCollider;
     let leverInt = false;
     let leverDir = 'right';
-    let leverTypeL = 0;
-    let leverTypeR = 0;
+    let leverTypeD = 0;
+    let leverTypeU = 0;
     let doubleJumpAv = false;
     let doubleJumpStop = true;
     let sky;
@@ -114,6 +114,7 @@
 
     function preload ()
     {
+        this.load.image('extBkr', 'assets/extBkr.png');
         this.load.image('projRef', 'projectionRef.jpg')
         this.load.image('sky', 'assets/sky.png');
         this.load.image('ground', 'assets/platform.png');
@@ -128,7 +129,7 @@
         );
         this.load.image('goal', 'assets/goal.png');
         this.load.spritesheet('lever', 'assets/lever.png',
-            {frameWidth: 96, frameHeight: 96}
+            {frameWidth: 174, frameHeight: 324}
         );
         this.load.spritesheet('leverIcon', '/assets/leverIcons.png',
             {frameWidth: 32, frameHeight: 32}
@@ -161,19 +162,20 @@
         mold = this.physics.add.staticGroup();
 
         // exterior backdrop
-        
+        extBkr = this.add.image(sky.x, sky.y, 'extBkr');
+        extBkr.setDepth(1);
 
         // lever
         lever = this.physics.add.staticSprite(0, 0, 'lever');
         lever.setDepth(1);
-        leverIconL = this.physics.add.staticSprite(0, 0, 'leverIcon');
-        leverIconL.setFrame(0);
-        leverIconL.setDepth(2);
-        leverIconR = this.physics.add.staticSprite(0, 0, 'leverIcon');
-        leverIconR.setFrame(0);
-        leverIconR.setDepth(2);
+        leverIconD = this.physics.add.staticSprite(0, 0, 'leverIcon');
+        leverIconD.setFrame(0);
+        leverIconD.setDepth(2);
+        leverIconU = this.physics.add.staticSprite(0, 0, 'leverIcon');
+        leverIconU.setFrame(0);
+        leverIconU.setDepth(2);
 
-
+        // player
         player = this.physics.add.sprite(1700, 1700, 'bunny');
         player.setBounce(0.15);
         player.setCollideWorldBounds(true);
@@ -233,8 +235,8 @@
             extRules[key] = false;
         }
        
-        // if leverDir === left ?, then use leverIconL, else: use leverIconR
-        switch(leverDir === 'left' ? leverTypeL : leverTypeR){
+        // if leverDir === left ?, then use leverIconD, else: use leverIconU
+        switch(leverDir === 'left' ? leverTypeD : leverTypeU){
             case 0:
                 extRules.doubleJump = true;
                 break;
@@ -282,10 +284,10 @@
                 moldPos.x1 = 150;
                 moldPos.y = 87;
                 moldChainA = 5;
-                leverPos.x = -530;
-                leverPos.y = -20;
-                leverTypeL = 0;
-                leverTypeR = 1;
+                leverPos.x = -630;
+                leverPos.y = -40;
+                leverTypeD = 0;
+                leverTypeU = 1;
                 break;
             case 2:
                 playerPos.x = 0;
@@ -307,10 +309,10 @@
                 moldPos.x1 = -170;
                 moldPos.y = -115;
                 moldChainA = 3;
-                leverPos.x = 520;
+                leverPos.x = 620;
                 leverPos.y = 70;
-                leverTypeL = 0;
-                leverTypeR = 1;
+                leverTypeD = 0;
+                leverTypeU = 1;
                 break;
             case 3:
 
@@ -379,10 +381,10 @@
 
         //EXTERNAL
         lever.setPosition(sky.x + leverPos.x, sky.y + leverPos.y, 'lever');
-        leverIconL.setPosition(sky.x + leverPos.x-29, sky.y + leverPos.y+31, 'leverIcon');
-        leverIconL.setFrame(leverTypeL);
-        leverIconR.setPosition(sky.x + leverPos.x+29, sky.y + leverPos.y+31, 'leverIcon');
-        leverIconR.setFrame(leverTypeR);
+        leverIconD.setPosition(sky.x + leverPos.x, sky.y + leverPos.y+100, 'leverIcon');
+        leverIconD.setFrame(leverTypeD);
+        leverIconU.setPosition(sky.x + leverPos.x, sky.y + leverPos.y-100, 'leverIcon');
+        leverIconU.setFrame(leverTypeU);
 
         // refresh collison hitboxes
         breakPlat1.refreshBody();
