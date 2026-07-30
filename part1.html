@@ -16,6 +16,7 @@
     var gameOver = false;
     let cJump = true;
     let airTime = 0;
+    // level 0 for testing
     let level = 1;
     let levelText;
     let cursorText;
@@ -55,9 +56,10 @@
         h2: 25,
         w3: 236,
         h3: 25,
-        w4: 300,
+        // plats 4 and 5 are used for permennat external platforms
+        w4: 720,
         h4: 25,
-        w5: 300,
+        w5: 730,
         h5: 25,
     }
 
@@ -68,10 +70,10 @@
         y2: -900,
         x3: 0,
         y3: -900,
-        x4: 0,
-        y4: -900,
-        x5: 0,
-        y5: -900,
+        x4: 970,
+        y4: -25,
+        x5: 1018,
+        y5: 395,
     }
 
     let breakPlatPos = {
@@ -81,16 +83,16 @@
 
     let colorPlatPos = {
         blueX1: 0,
-        blueY1: 0,
+        blueY1: -900,
     }
 
     let mushPos = {
         x: 0,
-        y: 0,
+        y: -900,
     }
 
     let moldPos = {
-        y: 0,
+        y: -900,
         x1: 0,
         x2: 0,
         x3: 0,
@@ -100,12 +102,12 @@
 
     let goalPos = {
         x: 0,
-        y: 0,
+        y: -900,
     }
 
     let leverPos = {
         x: 0,
-        y: 0,
+        y: -900,
     }
 
     var config = {
@@ -132,6 +134,7 @@
 
     function preload ()
     {
+        this.load.image('deskBkr', 'assets/deskBkr.png');
         this.load.image('extBkr', 'assets/extBkr.png');
         this.load.image('projRef', 'projectionRef.jpg')
         this.load.image('sky', 'assets/sky.png');
@@ -158,11 +161,14 @@
     {
         //scale to match resolution ratio
         // this.add.image(0, 0, 'projRef').setOrigin(0,0).setScale(2.16); 
-        sky = this.add.image(2018, 1532, 'sky').setDisplaySize(936, 487);
+        sky = this.add.image(650, 932, 'sky').setDisplaySize(936, 487);
         // sky.setTint('0xffffff').setAlpha(0.5);
 
+        // 2nd monitor background
+        deskBkr = this.add.image(sky.x + 1025, sky.y + 198, 'deskBkr').setScale(0.43).setDepth(2);
+
         // goal
-        goal = this.physics.add.staticSprite(0, 0, 'goal');
+        goal = this.physics.add.staticSprite(0, 0, 'goal').setDepth(3);
 
         //mushroom spring
         mushroom = this.physics.add.staticSprite(0, 0, 'mushroom');
@@ -180,8 +186,7 @@
         mold = this.physics.add.staticGroup();
 
         // exterior backdrop [REMOVE TO TEST]
-        extBkr = this.add.image(sky.x, sky.y, 'extBkr');
-        extBkr.setDepth(1);
+        extBkr = this.add.image(sky.x, sky.y, 'extBkr').setDepth(1);
 
         // lever
         lever = this.physics.add.staticSprite(0, 0, 'lever');
@@ -308,9 +313,19 @@
     }
 
     function levelSetup(){
+        // moves all objects out of view
+                playerPos.y = -900;
+                platPos.y1 = -900;
+                platPos.y2 = -900;
+                platPos.y3 = -900;
+                breakPlatPos.y1 = -900;
+                colorPlatPos.blueY1 = -900;
+                goalPos.y = -900;
+                mushPos.y = -900;
+                moldPos.y = -900;
         // checks level for position
         switch(level){
-            case 1:
+            case 0:
                 playerPos.x = -300;
                 playerPos.y = 180;
                 platSize.w1 = 300;
@@ -338,6 +353,37 @@
                 moldChainA = 5;
                 leverPos.x = -630;
                 leverPos.y = -40;
+                leverTypeD = 0;
+                leverTypeU = 1;
+                break;
+            case 1:
+                playerPos.x = -300;
+                playerPos.y = 180;
+                platSize.w1 = 300;
+                platSize.h1 = 25;
+                platSize.w2 = 300;
+                platSize.h2 = 25;
+                platSize.w3 = 250;
+                platSize.h3 = 25;
+                platPos.x1 = 270;
+                platPos.y1 = 103;
+                platPos.x2 = 200;
+                platPos.y2 = -60;
+                platPos.x3 = -450;
+                platPos.y3 = 9;
+                breakPlatPos.x1 = -162;
+                breakPlatPos.y1 = 1;
+                colorPlatPos.blueX1 = -320;
+                colorPlatPos.blueY1 = 120;
+                goalPos.x = -350;
+                goalPos.y = -100;
+                mushPos.x = -100;
+                mushPos.y = 190;
+                moldPos.x1 = 150;
+                moldPos.y = 90;
+                moldChainA = 5;
+                leverPos.x = 630;
+                leverPos.y = -250;
                 leverTypeD = 0;
                 leverTypeU = 1;
                 break;
@@ -494,11 +540,11 @@
         }
 
         // FALLS IN PIT
-        if (player.y >= (sky.y + sky.displayHeight/2)){
-            player.x = safeSpotX;
-            player.y = (safeSpotY-5);
-            player.setVelocityY(0);
-        }
+        // if (player.y >= (sky.y + sky.displayHeight/2)){
+        //     player.x = safeSpotX;
+        //     player.y = (safeSpotY-5);
+        //     player.setVelocityY(0);
+        // }
      
         // JUMP
         if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
