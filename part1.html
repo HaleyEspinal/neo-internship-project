@@ -153,7 +153,7 @@
             {frameWidth: 174, frameHeight: 324}
         );
         this.load.spritesheet('leverIcon', '/assets/leverIcons.png',
-            {frameWidth: 32, frameHeight: 32}
+            {frameWidth: 128, frameHeight: 128}
         );
     }
 
@@ -189,20 +189,15 @@
         extBkr = this.add.image(sky.x, sky.y, 'extBkr').setDepth(1);
 
         // lever
-        lever = this.physics.add.staticSprite(0, 0, 'lever');
-        lever.setDepth(1);
-        leverIconD = this.physics.add.staticSprite(0, 0, 'leverIcon');
-        leverIconD.setFrame(0);
-        leverIconD.setDepth(2);
-        leverIconU = this.physics.add.staticSprite(0, 0, 'leverIcon');
-        leverIconU.setFrame(0);
-        leverIconU.setDepth(2);
+        lever = this.physics.add.staticSprite(0, 0, 'lever').setDepth(1).setScale(0.5);
+        leverIconD = this.physics.add.staticSprite(0, 0, 'leverIcon').setFrame(0).setDepth(5).setScale(0.75);
+        leverIconU = this.physics.add.staticSprite(0, 0, 'leverIcon').setFrame(0).setDepth(5).setScale(0.75);
 
         // player
         player = this.physics.add.sprite(1700, 1700, 'bunny').setScale(1.5);
         player.setBounce(0);
         player.setCollideWorldBounds(true);
-        player.setDepth(5);
+        player.setDepth(4);
 
         this.anims.create({
             key: 'left',
@@ -292,8 +287,8 @@
         bluePlatforms.clear(true, true);
         level += 1;
         levelText.setText ('Level: ' + level);
-
-        lever
+        player.setVelocityX(0);
+        player.setVelocityY(0);
 
         // resets platform sizes to default
         platSize.w1 = 300;
@@ -329,7 +324,7 @@
         switch(level){
             case 0:
                 playerPos.x = -300;
-                playerPos.y = 180;
+                playerPos.y = 175;
                 platSize.w1 = 300;
                 platSize.h1 = 25;
                 platSize.w2 = 300;
@@ -360,7 +355,7 @@
                 break;
             case 1:
                 playerPos.x = -300;
-                playerPos.y = 180;
+                playerPos.y = 175;
                 platSize.w1 = 300;
                 platSize.h1 = 25;
                 platSize.w2 = 300;
@@ -384,14 +379,14 @@
                 moldPos.x1 = 150;
                 moldPos.y = 90;
                 moldChainA = 5;
-                leverPos.x = 630;
-                leverPos.y = -250;
+                leverPos.x = 1050;
+                leverPos.y = -220;
                 leverTypeD = 0;
                 leverTypeU = 1;
                 break;
             case 2:
                 playerPos.x = 0;
-                playerPos.y = 180;
+                playerPos.y = 175;
                 platPos.x1 = -300;
                 platPos.y1 = 150;
                 platPos.x2 = 300;
@@ -409,8 +404,8 @@
                 moldPos.x1 = -130;
                 moldPos.y = -112;
                 moldChainA = 3;
-                leverPos.x = 620;
-                leverPos.y = 70;
+                leverPos.x = 1050;
+                leverPos.y = -200;
                 leverTypeD = 2;
                 leverTypeU = 0;
                 break;
@@ -485,9 +480,9 @@
         leverDir = 'up';
         lever.setFrame(0);
         lever.setPosition(sky.x + leverPos.x, sky.y + leverPos.y, 'lever');
-        leverIconD.setPosition(sky.x + leverPos.x, sky.y + leverPos.y+100, 'leverIcon');
+        leverIconD.setPosition(sky.x + leverPos.x, sky.y + leverPos.y+135, 'leverIcon');
         leverIconD.setFrame(leverTypeD);
-        leverIconU.setPosition(sky.x + leverPos.x, sky.y + leverPos.y-100, 'leverIcon');
+        leverIconU.setPosition(sky.x + leverPos.x, sky.y + leverPos.y-135, 'leverIcon');
         leverIconU.setFrame(leverTypeU);
 
         // refresh collison hitboxes
@@ -509,7 +504,7 @@
 
     function springUp(){
         if (player.body.touching.down && mushroom.body.touching.up){
-            player.setVelocityY(-600);
+            player.setVelocityY(-700);
             cJump = false;
         }
     }
@@ -522,11 +517,11 @@
 
     function update(){
         if (cursors.left.isDown){
-            player.setVelocityX(-200);
+            player.setVelocityX(-230);
             player.anims.play('left', true);
         }
         else if (cursors.right.isDown){
-            player.setVelocityX(200);
+            player.setVelocityX(230);
             player.anims.play('right', true);
         }
         else{
@@ -536,7 +531,7 @@
 
         // SAFESPOT
         // safespot only taken if player is far enough from mold edge
-        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 50)) || (player.x >= (rightMold + 12 + 50))) && !breakPlat1Touched){
+        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 100)) || (player.x >= (rightMold + 12 + 100))) && !breakPlat1Touched){
             safeSpotX = player.x;
             safeSpotY = player.y;
         }
