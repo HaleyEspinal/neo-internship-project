@@ -55,13 +55,19 @@
         h1: 25,
         w2: 300,
         h2: 25,
-        w3: 236,
+        w3: 300,
         h3: 25,
-        // plats 4 and 5 are used for permennat external platforms
-        w4: 720,
+        w4: 300,
         h4: 25,
-        w5: 730,
+        w5: 300,
         h5: 25,
+        // plats 6, 7 and 8 are used for permennat external platforms
+        w6: 720,
+        h6: 25,
+        w7: 730,
+        h7: 25,
+        w8: 880,
+        h8: 15,
     }
 
     let platPos = {
@@ -71,10 +77,16 @@
         y2: -900,
         x3: 0,
         y3: -900,
-        x4: 970,
-        y4: -25,
-        x5: 1018,
-        y5: 395,
+        x4: 0,
+        y4: -900,
+        x5: 0,
+        y5: -900,
+        x6: 970,
+        y6: -25,
+        x7: 1010,
+        y7: 400,
+        x8: -10,
+        y8: -258,
     }
 
     let breakPlatPos = {
@@ -198,7 +210,7 @@
         mold = this.physics.add.staticGroup();
 
         // exterior backdrop [REMOVE TO TEST]
-        extBkr = this.add.image(sky.x, sky.y, 'extBkr').setDepth(1);
+        // extBkr = this.add.image(sky.x, sky.y, 'extBkr').setDepth(1);
 
         // lever
         lever = this.physics.add.staticSprite(0, 0, 'lever').setDepth(1).setScale(0.5);
@@ -319,6 +331,10 @@
         platSize.h2 = 25;
         platSize.w3 = 300;
         platSize.h3 = 25;
+        platSize.w4 = 300;
+        platSize.h4 = 25;
+        platSize.w5 = 300;
+        platSize.h5 = 25;
 
         levelSetup();
         leverFlipped();
@@ -338,6 +354,8 @@
                 platPos.y1 = -1900;
                 platPos.y2 = -1900;
                 platPos.y3 = -1900;
+                platPos.y4 = -1900;
+                platPos.y5 = -1900;
                 breakPlatPos.y1 = -1900;
                 colorPlatPos.blueY1 = -1900;
                 keyPos.y = -1900;
@@ -382,7 +400,7 @@
                 break;
             case 1:
                 playerPos.x = -300;
-                playerPos.y = 175;
+                playerPos.y = -575;
                 platSize.w1 = 300;
                 platSize.h1 = 25;
                 platSize.w2 = 300;
@@ -438,7 +456,7 @@
                 moldPos.y = -112;
                 moldChainA = 3;
                 leverPos.x = 1050;
-                leverPos.y = -200;
+                leverPos.y = -220;
                 leverTypeD = 2;
                 leverTypeU = 0;
                 break;
@@ -472,6 +490,10 @@
         plat3 = platforms.create(sky.x + platPos.x3, sky.y + platPos.y3, 'ground').setDisplaySize(platSize.w3, platSize.h3).refreshBody();
         plat4 = platforms.create(sky.x + platPos.x4, sky.y + platPos.y4, 'ground').setDisplaySize(platSize.w4, platSize.h4).refreshBody();
         plat5 = platforms.create(sky.x + platPos.x5, sky.y + platPos.y5, 'ground').setDisplaySize(platSize.w5, platSize.h5).refreshBody();
+        plat6 = platforms.create(sky.x + platPos.x6, sky.y + platPos.y6, 'ground').setDisplaySize(platSize.w6, platSize.h6).refreshBody();
+        plat7 = platforms.create(sky.x + platPos.x7, sky.y + platPos.y7, 'ground').setDisplaySize(platSize.w7, platSize.h7).refreshBody();
+        plat8 = platforms.create(sky.x + platPos.x8, sky.y + platPos.y8, 'ground').setDisplaySize(platSize.w8, platSize.h8).refreshBody();
+
 
         // breakaway platforms
         breakPlat1.setPosition(sky.x + breakPlatPos.x1, sky.y + breakPlatPos.y1, 'breakPlat');
@@ -545,7 +567,7 @@
     }
 
     function springUp(){
-        if (player.body.touching.down && mushroom.body.touching.up){
+        if (player.body.touching.down && mushroom.body.touching.up && player.y <= (mushroom.y - mushroom.height/2)){
             player.setVelocityY(-700);
             cJump = false;
         }
@@ -682,7 +704,7 @@
         testText.setText ('Blue: ' + extRules.colorBlue);
         cursorText.setText ('Mouse: ' + this.input.activePointer.x + ', ' + this.input.activePointer.y);
 
-        console.log('extRules.doubleJump', extRules.doubleJump, doubleJumpAv);
+        // console.log('extRules.doubleJump', extRules.doubleJump, doubleJumpAv);
     }
     
 
