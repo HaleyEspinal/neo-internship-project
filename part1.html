@@ -35,6 +35,7 @@
     let doubleJumpStop = true;
     let shrinkLatch = false;
     let sky;
+    let goalOpen = false;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -105,6 +106,11 @@
         y: -900,
     }
 
+    let keyPos = {
+        x: 0,
+        y: -900,
+    }
+
     let leverPos = {
         x: 0,
         y: -900,
@@ -148,13 +154,16 @@
             'assets/bunny.png',
             { frameWidth: 40, frameHeight: 32 }
         );
-        this.load.image('goal', 'assets/goal.png');
+        this.load.spritesheet('goal', 'assets/goal.png',
+            { frameWidth: 32, frameHeight: 32 }
+        );
         this.load.spritesheet('lever', 'assets/lever.png',
             {frameWidth: 174, frameHeight: 324}
         );
         this.load.spritesheet('leverIcon', '/assets/leverIcons.png',
             {frameWidth: 128, frameHeight: 128}
         );
+        this.load.image('key', 'assets/key.png');
     }
 
     function create ()
@@ -168,7 +177,10 @@
         deskBkr = this.add.image(sky.x + 1025, sky.y + 198, 'deskBkr').setScale(0.43).setDepth(2);
 
         // goal
-        goal = this.physics.add.staticSprite(0, 0, 'goal').setDepth(3);
+        goal = this.physics.add.staticSprite(0, 0, 'goal').setDepth(3).setFrame(0).setScale(1.5);
+
+        // key
+        key = this.physics.add.staticSprite(0, 0, 'key').setScale(1.25);
 
         //mushroom spring
         mushroom = this.physics.add.staticSprite(0, 0, 'mushroom');
@@ -226,6 +238,7 @@
         this.physics.add.overlap(player, goal, goalReached, null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
         this.physics.add.overlap(player, mold, moldTouch, null, this);
+        this.physics.add.overlap(player, key, keyCollect, null, this);
 
         // keyboard inputs
         cursors = this.input.keyboard.createCursorKeys();
@@ -281,7 +294,16 @@
         colorPlatCheck();
        }
 
+    function keyCollect(){
+        key.disableBody(true, true);
+        goal.setFrame(0);
+        goalOpen = true;
+    }
+
     function goalReached(){
+        if (!goalOpen){
+            return;
+        }
         platforms.clear(true, true);
         mold.clear(true, true);
         bluePlatforms.clear(true, true);
@@ -307,19 +329,21 @@
 
         // re-enables the breakaway platform, 0 0 is ignored because of first parameter
         breakPlat1.enableBody(false, 0, 0, true, true);
+        key.enableBody(false, 0, 0, true, true);
     }
 
     function levelSetup(){
         // moves all objects out of view
-                playerPos.y = -900;
-                platPos.y1 = -900;
-                platPos.y2 = -900;
-                platPos.y3 = -900;
-                breakPlatPos.y1 = -900;
-                colorPlatPos.blueY1 = -900;
-                goalPos.y = -900;
-                mushPos.y = -900;
-                moldPos.y = -900;
+                playerPos.y = -1900;
+                platPos.y1 = -1900;
+                platPos.y2 = -1900;
+                platPos.y3 = -1900;
+                breakPlatPos.y1 = -1900;
+                colorPlatPos.blueY1 = -1900;
+                keyPos.y = -1900;
+                goalPos.y = -1900;
+                mushPos.y = -1900;
+                moldPos.y = -1900;
         // checks level for position
         switch(level){
             case 0:
@@ -341,8 +365,11 @@
                 breakPlatPos.y1 = 1;
                 colorPlatPos.blueX1 = -320;
                 colorPlatPos.blueY1 = 120;
-                goalPos.x = -350;
+                goalPos.x = 250;
                 goalPos.y = -100;
+                goalOpen = true;
+                keyPos.x = -550;
+                keyPos.y = -100;
                 mushPos.x = -100;
                 mushPos.y = 190;
                 moldPos.x1 = 150;
@@ -372,8 +399,11 @@
                 breakPlatPos.y1 = 1;
                 colorPlatPos.blueX1 = -320;
                 colorPlatPos.blueY1 = 120;
+                keyPos.x = 250;
+                keyPos.y = -100;
                 goalPos.x = -350;
                 goalPos.y = -100;
+                goalOpen = false;
                 mushPos.x = -100;
                 mushPos.y = 190;
                 moldPos.x1 = 150;
@@ -397,8 +427,11 @@
                 breakPlatPos.y1 = 20;
                 colorPlatPos.blueX1 = 300;
                 colorPlatPos.blueY1 = -50;
+                keyPos.x = 250;
+                keyPos.y = -100;
                 goalPos.x = 0;
                 goalPos.y = -190;
+                goalOpen = false;
                 mushPos.x = -220;
                 mushPos.y = 70;
                 moldPos.x1 = -130;
@@ -418,6 +451,14 @@
 
         // goal
         goal.setPosition(sky.x + goalPos.x, sky.y + goalPos.y, 'goal');
+        if (goalOpen){
+            goal.setFrame(0);
+        } else {
+            goal.setFrame(1);
+        }
+
+        // key
+        key.setPosition(sky.x + keyPos.x, sky.y + keyPos.y, 'key');
 
         // mushroom spring
         mushroom.setPosition(sky.x + mushPos.x, sky.y + mushPos.y, 'mushroom');
@@ -489,6 +530,7 @@
         breakPlat1.refreshBody();
         mushroom.refreshBody();
         goal.refreshBody();
+        key.refreshBody();
     }
 
     function colorPlatCheck(){
