@@ -35,7 +35,7 @@
     let doubleJumpStop = true;
     let shrinkLatch = false;
     let sky;
-    let goalOpen = false;
+    let goalOpen = true;
 
     // this is an object, not an array
     // example of call: platPosition.x1
@@ -164,7 +164,7 @@
         this.load.image('moldEdge', 'assets/moldEdge.png');
         this.load.spritesheet('bunny',
             'assets/bunny.png',
-            { frameWidth: 40, frameHeight: 32 }
+            { frameWidth: 36, frameHeight: 32, spacing: 4}
         );
         this.load.spritesheet('goal', 'assets/goal.png',
             { frameWidth: 32, frameHeight: 32 }
@@ -210,7 +210,7 @@
         mold = this.physics.add.staticGroup();
 
         // exterior backdrop [REMOVE TO TEST]
-        // extBkr = this.add.image(sky.x, sky.y, 'extBkr').setDepth(1);
+        extBkr = this.add.image(sky.x, sky.y, 'extBkr').setDepth(1);
 
         // lever
         lever = this.physics.add.staticSprite(0, 0, 'lever').setDepth(1).setScale(0.5);
@@ -399,34 +399,27 @@
                 leverTypeU = 1;
                 break;
             case 1:
-                playerPos.x = -300;
-                playerPos.y = -575;
-                platSize.w1 = 300;
-                platSize.h1 = 25;
-                platSize.w2 = 300;
-                platSize.h2 = 25;
-                platSize.w3 = 250;
-                platSize.h3 = 25;
-                platPos.x1 = 270;
-                platPos.y1 = 103;
-                platPos.x2 = 200;
-                platPos.y2 = -60;
-                platPos.x3 = -450;
-                platPos.y3 = 9;
-                breakPlatPos.x1 = -162;
-                breakPlatPos.y1 = 1;
-                colorPlatPos.blueX1 = -320;
-                colorPlatPos.blueY1 = 120;
-                keyPos.x = 250;
-                keyPos.y = -100;
+                playerPos.x = -250;
+                playerPos.y = -50;
+                platSize.w1 = 130;
+                platSize.h1 = 50;
+                platSize.w2 = 80;
+                platSize.h2 = 30;
+                platSize.w3 = 80;
+                platSize.h3 = 30;
+                platSize.w4 = 130;
+                platSize.h4 = 50;
+                platPos.x1 = -250;
+                platPos.y1 = 5;
+                platPos.x2 = -75;
+                platPos.y2 = 0;
+                platPos.x3 = 75;
+                platPos.y3 = 0;
+                platPos.x4 = 250;
+                platPos.y4 = 5;
                 goalPos.x = -350;
                 goalPos.y = -100;
                 goalOpen = false;
-                mushPos.x = -100;
-                mushPos.y = 190;
-                moldPos.x1 = 150;
-                moldPos.y = 90;
-                moldChainA = 5;
                 leverPos.x = 1050;
                 leverPos.y = -220;
                 leverTypeD = 0;
@@ -580,12 +573,13 @@
     }
 
     function update(){
+        // MOVEMENT WALKING
         if (cursors.left.isDown){
-            player.setVelocityX(-230);
+            player.setVelocityX(-190);
             player.anims.play('left', true);
         }
         else if (cursors.right.isDown){
-            player.setVelocityX(230);
+            player.setVelocityX(190);
             player.anims.play('right', true);
         }
         else{
@@ -601,11 +595,12 @@
         }
 
         // FALLS IN PIT
-        // if (player.y >= (sky.y + sky.displayHeight/2)){
-        //     player.x = safeSpotX;
-        //     player.y = (safeSpotY-5);
-        //     player.setVelocityY(0);
-        // }
+        if (player.y >= (sky.y + sky.displayHeight/2) && player.x <= (sky.x + sky.displayWidth/2) && player.x >= (sky.x - sky.displayWidth/2) 
+            || player.y >= (sky.y + sky.displayHeight/2 + 200)){
+            player.x = safeSpotX;
+            player.y = (safeSpotY-5);
+            player.setVelocityY(0);
+        }
      
         // JUMP
         if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
