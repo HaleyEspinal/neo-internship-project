@@ -17,7 +17,7 @@
     let cJump = true;
     let airTime = 0;
     // level 0 for testing
-    let level = 1;
+    let level = 4;
     let levelText;
     let cursorText;
     let safeSpotX;
@@ -25,6 +25,7 @@
     let moldChainA = 3;
     let rightMold;
     let breakPlat1Touched;
+    let mushTouched = false;
     let onBreakPlat;
     let blueCollider;
     let leverInt = false;
@@ -244,7 +245,7 @@
         });
 
         // collision and overlaps
-        this.physics.add.collider(player, platforms);
+        this.physics.add.collider(player, platforms, platTouch, null, this);
         this.physics.add.collider(player, breakPlat1, breakPlat1Check, null, this);
         blueCollider = this.physics.add.collider(player, bluePlatforms);
         this.physics.add.overlap(player, goal, goalReached, null, this);
@@ -260,7 +261,7 @@
 
         // text
         testText = this.add.text(16, 20, 'Blue: ', {fontSize: '32px', fill: '#ffffff'})
-        levelText = this.add.text(16, 50, 'Level: 1', {fontSize: '32px', fill: '#ffffff'})
+        levelText = this.add.text(sky.x + sky.width/2 - 130, sky.y - sky.height/2 + 70, 'Level: 1', {fontSize: '32px', fill: '#000000'})
         cursorText = this.add.text(16, 80, 'Mouse: ', {fontSize: '32px', fill: '#ffffff'})
         
 
@@ -271,6 +272,14 @@
     function breakPlat1Check(){
         breakPlat1Touched = true;
         onBreakPlat = true;
+    }
+
+    function mushCheck(){
+        mushTouched = true;
+    }
+
+    function platTouch(){
+        mushTouched = false;
     }
 
     function leverFlipped(){
@@ -291,7 +300,6 @@
         // if leverDir === left ?, then use leverIconD, else: use leverIconU
         switch(leverDir === 'down' ? leverTypeD : leverTypeU){
             case 0:
-                extRules.doubleJump = true;
                 break;
             case 1:
                 extRules.colorBlue = true;
@@ -301,6 +309,9 @@
                 shrinkLatch = true;
                 player.setBounce(0.1);
                 player.body.setGravityY(-250);
+                break;
+            case 4:
+                extRules.doubleJump = true;
                 break;
         }
 
@@ -351,7 +362,7 @@
         // re-enables the breakaway platform, 0 0 is ignored because of first parameter
         breakPlat1.enableBody(false, 0, 0, true, true);
         key.enableBody(false, 0, 0, true, true);
-        
+
         // moves all objects out of view
         playerPos.y = -1900;
         platPos.y1 = -1900;
@@ -402,7 +413,7 @@
                 leverTypeU = 1;
                 break;
             case 1:
-                playerPos.x = -250;
+                playerPos.x = -300;
                 playerPos.y = -50;
                 platSize.w1 = 130;
                 platSize.h1 = 50;
@@ -412,52 +423,100 @@
                 platSize.h3 = 30;
                 platSize.w4 = 130;
                 platSize.h4 = 50;
-                platPos.x1 = -250;
+                platPos.x1 = -300;
                 platPos.y1 = 5;
-                platPos.x2 = -75;
+                platPos.x2 = -85;
                 platPos.y2 = 0;
-                platPos.x3 = 75;
+                platPos.x3 = 85;
                 platPos.y3 = 0;
-                platPos.x4 = 250;
+                platPos.x4 = 300;
                 platPos.y4 = 5;
-                goalPos.x = -350;
+                goalPos.x = 300;
                 goalPos.y = -100;
                 goalOpen = true;
                 leverPos.x = 1050;
                 leverPos.y = -220;
-                leverTypeD = 0;
                 leverTypeU = 1;
+                leverTypeD = 0;
                 break;
             case 2:
-                playerPos.x = 0;
-                playerPos.y = 175;
-                platPos.x1 = -300;
+                playerPos.x = 300;
+                playerPos.y = 50;
+                platSize.w1 = 130;
+                platSize.h1 = 25;
+                platSize.w2 = 80;
+                platSize.h2 = 35;
+                platSize.w3 = 130;
+                platSize.h3 = 25;
+                platSize.w4 = 80;
+                platSize.h4 = 35;
+                platPos.x1 = 300;
                 platPos.y1 = 150;
-                platPos.x2 = 300;
-                platPos.y2 = 150;
+                platPos.x2 = 150;
+                platPos.y2 = 175;
                 platPos.x3 = 0;
-                platPos.y3 = -100;
-                breakPlatPos.x1 = 400;
-                breakPlatPos.y1 = 20;
-                colorPlatPos.blueX1 = 300;
-                colorPlatPos.blueY1 = -50;
-                keyPos.x = 250;
-                keyPos.y = -100;
-                goalPos.x = 0;
-                goalPos.y = -190;
-                goalOpen = false;
-                mushPos.x = -220;
-                mushPos.y = 70;
-                moldPos.x1 = -130;
-                moldPos.y = -112;
+                platPos.y3 = 150;
+                platPos.x4 = -150;
+                platPos.y4 = 175;
+                goalPos.x = -150;
+                goalPos.y = 100;
+                goalOpen = true;
+                moldPos.x1 = 125;
+                moldPos.y = 155;
                 moldChainA = 3;
                 leverPos.x = 1050;
                 leverPos.y = -220;
-                leverTypeD = 2;
-                leverTypeU = 0;
+                leverTypeU = 1;
+                leverTypeD = 0;
                 break;
             case 3:
-
+                playerPos.x = -300;
+                playerPos.y = 180;
+                platSize.w1 = 270;
+                platSize.h1 = 25;
+                platPos.x1 = -190;
+                platPos.y1 = 230;
+                platSize.w2 = 50
+                platSize.h2 = 350;
+                platPos.x2 = 70;
+                platPos.y2 = 100;
+                platSize.w3 = 230;
+                platSize.h3 = 25;
+                platPos.x3 = -230;
+                platPos.y3 = -140;
+                mushPos.x = -80;
+                mushPos.y = 206;
+                goalOpen = true;
+                goalPos.x = -300;
+                goalPos.y = -200;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
+                break;
+            case 4:
+                playerPos.x = -300;
+                playerPos.y = 20;
+                platSize.w1 = 700;
+                platSize.h1 = 25;
+                platPos.x1 = 0;
+                platPos.y1 = 100;
+                platSize.w2 = 700;
+                platSize.h2 = 25;
+                platPos.x2 = 0;
+                platPos.y2 = -120;
+                mushPos.x = 0;
+                mushPos.y = 75;
+                moldChainA = 5;
+                moldPos.x1 = -50;
+                moldPos.y = -108;
+                goalOpen = true;
+                goalPos.x = 280;
+                goalPos.y = 0;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
                 break;
         }
         // move player
@@ -478,7 +537,7 @@
         mushroom.setPosition(sky.x + mushPos.x, sky.y + mushPos.y, 'mushroom');
 
         // main ground
-        platforms.create(sky.x, (sky.y + sky.displayHeight/2 - 20), 'ground').setDisplaySize(936, 40).refreshBody();
+        // platforms.create(sky.x, (sky.y + sky.displayHeight/2 - 20), 'ground').setDisplaySize(936, 40).refreshBody();
 
         // other platforms
         plat1 = platforms.create(sky.x + platPos.x1, sky.y + platPos.y1, 'ground').setDisplaySize(platSize.w1, platSize.h1).refreshBody();
@@ -567,6 +626,8 @@
             player.setVelocityY(-700);
             cJump = false;
         }
+
+        mushCheck();
     }
 
     function moldTouch(){
@@ -592,7 +653,7 @@
 
         // SAFESPOT
         // safespot only taken if player is far enough from mold edge
-        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 100)) || (player.x >= (rightMold + 12 + 100))) && !breakPlat1Touched){
+        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 100)) || (player.x >= (rightMold + 12 + 100))) && !breakPlat1Touched && !mushTouched){
             safeSpotX = player.x;
             safeSpotY = player.y;
         }
