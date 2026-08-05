@@ -256,6 +256,7 @@
         cursors = this.input.keyboard.createCursorKeys();
         zeroKey = this.input.keyboard.addKey('ZERO');
         enterKey = this.input.keyboard.addKey('ENTER');
+        pKey = this.input.keyboard.addKey('P');
 
         // text
         testText = this.add.text(16, 20, 'Blue: ', {fontSize: '32px', fill: '#ffffff'})
@@ -343,25 +344,27 @@
         
  
 
-        // re-enables the breakaway platform, 0 0 is ignored because of first parameter
-        breakPlat1.enableBody(false, 0, 0, true, true);
-        key.enableBody(false, 0, 0, true, true);
+
     }
 
     function levelSetup(){
+        // re-enables the breakaway platform, 0 0 is ignored because of first parameter
+        breakPlat1.enableBody(false, 0, 0, true, true);
+        key.enableBody(false, 0, 0, true, true);
+        
         // moves all objects out of view
-                playerPos.y = -1900;
-                platPos.y1 = -1900;
-                platPos.y2 = -1900;
-                platPos.y3 = -1900;
-                platPos.y4 = -1900;
-                platPos.y5 = -1900;
-                breakPlatPos.y1 = -1900;
-                colorPlatPos.blueY1 = -1900;
-                keyPos.y = -1900;
-                goalPos.y = -1900;
-                mushPos.y = -1900;
-                moldPos.y = -1900;
+        playerPos.y = -1900;
+        platPos.y1 = -1900;
+        platPos.y2 = -1900;
+        platPos.y3 = -1900;
+        platPos.y4 = -1900;
+        platPos.y5 = -1900;
+        breakPlatPos.y1 = -1900;
+        colorPlatPos.blueY1 = -1900;
+        keyPos.y = -1900;
+        goalPos.y = -1900;
+        mushPos.y = -1900;
+        moldPos.y = -1900;
         // checks level for position
         switch(level){
             case 0:
@@ -419,7 +422,7 @@
                 platPos.y4 = 5;
                 goalPos.x = -350;
                 goalPos.y = -100;
-                goalOpen = false;
+                goalOpen = true;
                 leverPos.x = 1050;
                 leverPos.y = -220;
                 leverTypeD = 0;
@@ -689,6 +692,9 @@
             leverFlipped();
         }
 
+        if (Phaser.Input.Keyboard.JustDown(pKey)){
+            levelSetup();
+        }
 
         // TESTS
         if (Phaser.Input.Keyboard.JustDown(zeroKey)){
