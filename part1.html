@@ -17,7 +17,7 @@
     let cJump = true;
     let airTime = 0;
     // level 0 for testing
-    let level = 1;
+    let level = 14;
     let levelText;
     let cursorText;
     let safeSpotX;
@@ -64,12 +64,14 @@
         w5: 300,
         h5: 25,
         // plats 6, 7 and 8 are used for permennat external platforms
-        w6: 720,
+        w6: 710,
         h6: 25,
         w7: 730,
         h7: 25,
         w8: 880,
         h8: 15,
+        w9: 130,
+        h9: 15
     }
 
     let platPos = {
@@ -85,10 +87,12 @@
         y5: -900,
         x6: 970,
         y6: -25,
-        x7: 1010,
+        x7: 1015,
         y7: 395,
         x8: -10,
         y8: -258,
+        x9: 1595,
+        y9: 100,
     }
 
     let breakPlatPos = {
@@ -303,7 +307,7 @@
 
     function breakPlat1Check(){
         // prevents breaking from below
-        if (player.y > (breakPlat1.y + breakPlat1.height/2)){
+        if (player.y >= (breakPlat1.y - breakPlat1.height/2 - player.height/2)){
             return;
         }
         breakPlat1Touched = true;
@@ -788,16 +792,16 @@
                 goalPos.x = 1150;
                 goalPos.y = 70;
                 mushPos.x = 680;
-                mushPos.y = 280;
+                mushPos.y = 290;
                 platSize.w1 = 100;
                 platSize.h1 = 25;
                 platPos.x1 = 707;
-                platPos.y1 = 305;
+                platPos.y1 = 315;
                 platSize.w2 = 100;
                 platSize.h2 = 250;
                 platPos.x2 = 425;
                 platPos.y2 = 180;
-                platSize.w3 = 190;
+                platSize.w3 = 180;
                 platSize.h3 = 25;
                 platPos.x3 = 1320;
                 platPos.y3 = 163
@@ -817,14 +821,72 @@
                 platSize.h1 = 25;
                 platPos.x1 = 335;
                 platPos.y1 = -80;
-                platSize.w2 = 100;
+                platSize.w2 = 140;
                 platSize.h2 = 25;
-                platPos.x2 = 100;
+                platPos.x2 = 80;
                 platPos.y2 = -80;
+                platSize.h3 = 25;
+                platSize.w3 = 500;
+                platPos.x3 = 100;
+                platPos.y3 = 220;
+                platSize.h4 = 150;
+                platSize.w4 = 90;
+                platPos.x4 = 55;
+                platPos.y4 = -168;
+                mushPos.x = -60;
+                mushPos.y = 193;
+                keyPos.x = 175;
+                keyPos.y = -20;
+                goalOpen = false;
+                goalPos.x = -200;
+                goalPos.y = -200;
                 breakPlatSize.h1 = 25;
-                breakPlatSize.w1 = 50;
+                breakPlatSize.w1 = 80;
                 breakPlatPos.x1 = 175;
-                breakPlatPos.y1 = -80;
+                breakPlatPos.y1 = -55;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 0;
+                leverTypeD = 2;
+                break;
+            case 15:
+                playerPos.x = 180;
+                playerPos.y = 20;
+                platSize.h1 = 25;
+                platSize.w1 = 150;
+                platPos.x1 = 180;
+                platPos.y1 = 70;
+                platSize.h2 = 50;
+                platSize.w2 = 600;
+                platPos.x2 = 160;
+                platPos.y2 = 190;
+                platSize.h3 = 50;
+                platSize.w3 = 280;
+                platPos.x3 = -325;
+                platPos.y3 = 150;
+                platSize.h4 = 200;
+                platSize.w4 = 25;
+                platPos.x4 = -250;
+                platPos.y4 = -10;
+                platSize.h5 = 25;
+                platSize.w5 = 150;
+                platPos.x5 = -270;
+                platPos.y5 = -100
+                mushPos.x = -420;
+                mushPos.y = 110;
+                keyPos.x = -270;
+                keyPos.y = -150;
+                colorPlatSize.blueH1 = 100;
+                colorPlatSize.blueW1 = 250;
+                colorPlatPos.blueX1 = 1025;
+                colorPlatPos.blueY1 = 332;
+                goalOpen = false;
+                goalPos.x = 1025;
+                goalPos.y = 135;
+                breakPlatSize.h1 = 25;
+                breakPlatSize.w1 = 150;
+                breakPlatPos.x1 = 400;
+                breakPlatPos.y1 = -30;
                 leverPos.x = 1050;
                 leverPos.y = -220;
                 leverTypeU = 1;
@@ -860,6 +922,7 @@
         plat6 = platforms.create(sky.x + platPos.x6, sky.y + platPos.y6, 'ground').setDisplaySize(platSize.w6, platSize.h6).refreshBody();
         plat7 = platforms.create(sky.x + platPos.x7, sky.y + platPos.y7, 'ground').setDisplaySize(platSize.w7, platSize.h7).refreshBody();
         plat8 = platforms.create(sky.x + platPos.x8, sky.y + platPos.y8, 'ground').setDisplaySize(platSize.w8, platSize.h8).refreshBody();
+        plat9 = platforms.create(sky.x + platPos.x9, sky.y + platPos.y9, 'ground').setDisplaySize(platSize.w9, platSize.h9).refreshBody();
 
 
 
@@ -935,7 +998,7 @@
     function colorPlatCheck(){
         bluePlatforms.clear(true, true);
         if (extRules.colorBlue === true){
-            if (level === 13){
+            if (level === 13 || level === 15){
             bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff).setDisplaySize(colorPlatSize.blueW1, colorPlatSize.blueH1).refreshBody().setDepth(3);
             }
             else{
@@ -943,7 +1006,7 @@
             }
             blueCollider.active = true;
         } else {
-            if (level === 13){
+            if (level === 13 || level === 15){
             bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff).setDisplaySize(colorPlatSize.blueW1, colorPlatSize.blueH1).refreshBody().setDepth(3);
             }
             else{
@@ -1005,11 +1068,12 @@
         if (cursors.up.isDown && (player.body.touching.down || cJump === true)){
             if (extRules.shrink){
                 player.setVelocityY(-425);
+                jumpSound.play({rate:1.5});
             } else {
                 player.setVelocityY(-400);
+                jumpSound.play();
             }
             cJump = false;
-            jumpSound.play();
         }
 
         if (extRules.doubleJump && cursors.up.isUp && !player.body.touching.down){
@@ -1073,8 +1137,8 @@
         // LEVER PROXIMITY
         if (player.x <= (lever.x+lever.width/2 + 50) &&
             player.x >= (lever.x-lever.width/2 - 50) &&
-            player.y <= (lever.y+lever.height/2) &&
-            player.y >= (lever.y-lever.height/2 - 20)
+            player.y <= (lever.y+lever.height/2 + 30) &&
+            player.y >= (lever.y-lever.height/2 - 30)
             ){
                 leverInt = true;
             }
@@ -1103,6 +1167,7 @@
         if (Phaser.Input.Keyboard.JustDown(pKey)){
             levelSetup();
             leverFlipped();
+            leverDir === 'up';
         }
 
         // TESTS
