@@ -17,7 +17,7 @@
     let cJump = true;
     let airTime = 0;
     // level 0 for testing
-    let level = 1;
+    let level = 13;
     let levelText;
     let cursorText;
     let safeSpotX;
@@ -44,6 +44,7 @@
         doubleJump: false,
         colorBlue: false,
         shrink: false,
+        wifi: false,
     }
 
     let playerPos = {
@@ -105,6 +106,11 @@
         blueY1: -900,
     }
 
+    let colorPlatSize = {
+        blueW1: 80,
+        blueH1: 25,
+    }
+
     let mushPos = {
         x: 0,
         y: -900,
@@ -158,7 +164,9 @@
 
     function preload ()
     {
-        this.load.image('deskBkr', 'assets/deskBkr.png');
+        this.load.spritesheet('deskBkr', 'assets/deskBkr.png',
+            { frameWidth: 1920, frameHeight: 1080}
+        );
         this.load.image('extBkr', 'assets/extBkr.png');
         this.load.image('projRef', 'projectionRef.jpg')
         this.load.image('sky', 'assets/sky.png');
@@ -192,7 +200,7 @@
         // sky.setTint('0xffffff').setAlpha(0.5);
 
         // 2nd monitor background
-        deskBkr = this.add.image(sky.x + 1025, sky.y + 198, 'deskBkr').setScale(0.43).setDepth(2);
+        deskBkr = this.add.image(sky.x + 1025, sky.y + 198, 'deskBkr').setScale(0.43).setDepth(2).setFrame(0);
 
         // goal
         goal = this.physics.add.staticSprite(0, 0, 'goal').setDepth(3).setFrame(0).setScale(1.5);
@@ -201,7 +209,7 @@
         key = this.physics.add.staticSprite(0, 0, 'key').setScale(1.25);
 
         //mushroom spring
-        mushroom = this.physics.add.staticSprite(0, 0, 'mushroom');
+        mushroom = this.physics.add.staticSprite(0, 0, 'mushroom').setDepth(2);
 
         // platforms
         platforms = this.physics.add.staticGroup();
@@ -319,8 +327,11 @@
                 player.setBounce(0.1);
                 player.body.setGravityY(-250);
                 break;
-            case 4:
+            case 3:
                 extRules.doubleJump = true;
+                break;
+            case 4:
+                extRules.wifi = true;
                 break;
         }
 
@@ -358,6 +369,8 @@
         platSize.h5 = 25;
         breakPlatSize.w1 = 80;
         breakPlatSize.h1 = 25;
+        colorPlatSize.blueW1 = 80;
+        colorPlatSize.blueH1 = 25;
 
         levelSetup();
         leverFlipped();
@@ -616,6 +629,169 @@
                 leverTypeU = 1;
                 leverTypeD = 0;
                 break;
+            case 8:
+                playerPos.x = 250;
+                playerPos.y = -140;
+                platSize.w1 = 230;
+                platSize.h1 = 25;
+                platPos.x1 = 190;
+                platPos.y1 = -80;
+                platSize.w2 = 20;
+                platSize.h2 = 370;
+                platPos.x2 = -35;
+                platPos.y2 = -65;
+                platSize.w3 = 20;
+                platSize.h3 = 190;
+                platPos.x3 = 85;
+                platPos.y3 = 25;
+                platSize.w4 = 250;
+                platSize.h4 = 25;
+                platPos.x4 = -25;
+                platPos.y4 = 220;
+                breakPlatSize.w1 = 100;
+                breakPlatSize.h1 = 25;
+                breakPlatPos.x1 = 25;
+                breakPlatPos.y1 = 80;
+                colorPlatSize.blueW1 = 150;
+                colorPlatSize.blueH1 = 25;
+                colorPlatPos.blueX1 = -250;
+                colorPlatPos.blueY1 = 150;
+                goalOpen = true;
+                goalPos.x = -250;
+                goalPos.y = 50;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
+                break;
+            case 9:
+                playerPos.x = 0;
+                playerPos.y = 0;
+                platSize.w1 = 200;
+                platSize.h1 = 30;
+                platPos.x1 = 0;
+                platPos.y1 = 50;
+                platSize.w2 = 925;
+                platSize.h2 = 55;
+                platPos.x2 = 0;
+                platPos.y2 = 220;
+                goalOpen = true;
+                goalPos.x = 1330;
+                goalPos.y = 295;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
+                break;
+            case 10:
+                playerPos.x = -400;
+                playerPos.y = -100;
+                platSize.w1 = 300;
+                platSize.h1 = 25;
+                platPos.x1 = -325;
+                platPos.y1 = -50;
+                platSize.w2 = 340;
+                platSize.h2 = 50;
+                platPos.x2 = -310;
+                platPos.y2 = 175;
+                moldChainA = 5;
+                moldPos.x1 = -250;
+                moldPos.y = 150;
+                goalOpen = true;
+                goalPos.x = -325;
+                goalPos.y = 80;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
+                break;
+            case 11:
+                playerPos.x = -400;
+                playerPos.y = -100;
+                colorPlatSize.blueW1 = 938;
+                colorPlatSize.blueH1 = 25;
+                colorPlatPos.blueX1 = 0;
+                colorPlatPos.blueY1 = 0;
+                platSize.w1 = 925;
+                platSize.h1 = 55;
+                platPos.x1 = 0;
+                platPos.y1 = 220;
+                platSize.w2 = 50;
+                platSize.h2 = 190;
+                platPos.x2 = -440;
+                platPos.y2 = 98;
+                platSize.w3 = 50;
+                platSize.h3 = 190;
+                platPos.x3 = 440;
+                platPos.y3 = 98;
+                goalOpen = true;
+                goalPos.x = 0;
+                goalPos.y = 100;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
+                break;
+            case 12:
+                playerPos.x = 200;
+                playerPos.y = -100;
+                platSize.w1 = 300;
+                platSize.h1 = 25;
+                platPos.x1 = 320;
+                platPos.y1 = -50
+                platSize.w2 = 740;
+                platSize.h2 = 60;
+                platPos.x2 = 97;
+                platPos.y2 = 230;
+                platSize.w3 = 25;
+                platSize.h3 = 155;
+                platPos.x3 = -62;
+                platPos.y3 = 40;
+                mushPos.x = 50;
+                mushPos.y = 186;
+                colorPlatSize.blueH1 = 25;
+                colorPlatSize.blueW1 = 350;
+                colorPlatPos.blueX1 = -225;
+                colorPlatPos.blueY1 = -50;
+                keyPos.x = -150;
+                keyPos.y = 20;
+                goalOpen = false;
+                goalPos.x = -375;
+                goalPos.y = -120;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 0;
+                break;
+            case 13:
+                playerPos.x = 1300;
+                playerPos.y = 320;
+                goalOpen = true;
+                goalPos.x = 1150;
+                goalPos.y = 70;
+                mushPos.x = 680;
+                mushPos.y = 280;
+                platSize.w1 = 100;
+                platSize.h1 = 25;
+                platPos.x1 = 707;
+                platPos.y1 = 305;
+                platSize.w2 = 150;
+                platSize.h2 = 250;
+                platPos.x2 = 400;
+                platPos.y2 = 180;
+                platSize.w3 = 190;
+                platSize.h3 = 25;
+                platPos.x3 = 1320;
+                platPos.y3 = 163
+                colorPlatSize.blueW1 = 35;
+                colorPlatSize.blueH1 = 100;
+                colorPlatPos.blueX1 = 1375;
+                colorPlatPos.blueY1 = 60;
+                leverPos.x = 1050;
+                leverPos.y = -220;
+                leverTypeU = 1;
+                leverTypeD = 4;
+                break;
         }
         // move player
         player.setPosition(sky.x + playerPos.x, sky.y + playerPos.y);
@@ -648,11 +824,21 @@
         plat8 = platforms.create(sky.x + platPos.x8, sky.y + platPos.y8, 'ground').setDisplaySize(platSize.w8, platSize.h8).refreshBody();
 
 
+
+
         // breakaway platforms
         breakPlat1.setPosition(sky.x + breakPlatPos.x1, sky.y + breakPlatPos.y1, 'breakPlat').setDisplaySize(breakPlatSize.w1, breakPlatSize.h1).refreshBody();
 
         // color platforms
         colorPlatCheck();
+
+        // switches depths for specific levels (mostly issue with monitor 2)
+        if (level === 13){
+            plat1.setDepth(3);
+        }
+        else{
+            plat1.setDepth(1);
+        }
 
         // mold
         let moldAtexture3 = 'mold';
@@ -711,11 +897,21 @@
     function colorPlatCheck(){
         bluePlatforms.clear(true, true);
         if (extRules.colorBlue === true){
+            if (level === 13){
+            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff).setDisplaySize(colorPlatSize.blueW1, colorPlatSize.blueH1).refreshBody().setDepth(3);
+            }
+            else{
+            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff).setDisplaySize(colorPlatSize.blueW1, colorPlatSize.blueH1).refreshBody().setDepth(1);
+            }
             blueCollider.active = true;
-            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x0062ff);
         } else {
+            if (level === 13){
+            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff).setDisplaySize(colorPlatSize.blueW1, colorPlatSize.blueH1).refreshBody().setDepth(3);
+            }
+            else{
+            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff).setDisplaySize(colorPlatSize.blueW1, colorPlatSize.blueH1).refreshBody().setDepth(1);
+            }
             blueCollider.active = false;
-            bluePlatforms.create(sky.x + colorPlatPos.blueX1, sky.y + colorPlatPos.blueY1, 'colorPlat').setTint(0x6ea6ff);
         }
     }
 
@@ -730,7 +926,7 @@
 
     function moldTouch(){
         player.x = safeSpotX;
-        player.y = (safeSpotY-5);
+        player.y = (safeSpotY-25);
         player.setVelocityY(0);
     }
 
@@ -793,6 +989,14 @@
             doubleJumpStop = true;
         }
 
+        // WIFI
+        if (extRules.wifi){
+            deskBkr.setFrame(1);
+        }
+        else {
+            deskBkr.setFrame(0);
+        }
+
         // coyote jump. If player is NOT touching down
         if (!player.body.touching.down){
             // coyote jump timer
@@ -823,8 +1027,8 @@
         onBreakPlat = false;
 
         // LEVER PROXIMITY
-        if (player.x <= (lever.x+lever.width/2 + 10) &&
-            player.x >= (lever.x-lever.width/2 - 10) &&
+        if (player.x <= (lever.x+lever.width/2 + 50) &&
+            player.x >= (lever.x-lever.width/2 - 50) &&
             player.y <= (lever.y+lever.height/2) &&
             player.y >= (lever.y-lever.height/2 - 20)
             ){
@@ -853,6 +1057,7 @@
 
         if (Phaser.Input.Keyboard.JustDown(pKey)){
             levelSetup();
+            leverFlipped();
         }
 
         // TESTS
