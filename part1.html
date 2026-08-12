@@ -17,6 +17,7 @@
     let airTime = 0;
     let flashCount = 0;
     let dying = false;
+    let lvlTran = false;
     // level 0 for testing
     let level = 2;
     let levelText;
@@ -198,6 +199,9 @@
         this.load.spritesheet('leverIcon', '/assets/leverIcons.png',
             {frameWidth: 128, frameHeight: 128}
         );
+        this.load.spritesheet('goalSign', '/assets/goalSign.png',
+            {frameWidth: 120, frameHeight: 80}
+        );
         this.load.image('key', 'assets/key.png');
         this.load.image('xButton', 'assets/xbutton.png');
         this.load.image('yButton', 'assets/ybutton.png');
@@ -229,6 +233,9 @@
         // this.add.image(0, 0, 'projRef').setOrigin(0,0).setScale(2.16); 
         sky = this.add.image(650, 932, 'sky').setDisplaySize(936, 487);
         // sky.setTint('0xffffff').setAlpha(0.5);
+
+        // Goal Sign
+        goalSign = this.add.sprite(0, -900, 'goalSign').setDepth(5).setScale(2);
 
         //Button icons
         yButton = this.add.image(sky.x + 248, sky.y - 183, 'yButton').setScale(0.8);
@@ -272,6 +279,8 @@
         player.setCollideWorldBounds(true);
         player.setDepth(4);
 
+
+        // ANIMATIONS
         this.anims.create({
             key: 'left',
             frames: this.anims.generateFrameNumbers('bunny', { start: 0, end: 1 }),
@@ -292,11 +301,18 @@
             repeat: -1
         });
 
+        this.anims.create({
+            key: 'goalSign',
+            frames: this.anims.generateFrameNumbers('goalSign', { start: 0, end: 1 }),
+            frameRate: 10,
+            repeat: -1
+        });
+
         // collision and overlaps
         this.physics.add.collider(player, platforms, platTouch, null, this);
         this.physics.add.collider(player, breakPlat1, breakPlat1Check, null, this);
         blueCollider = this.physics.add.collider(player, bluePlatforms);
-        this.physics.add.overlap(player, goal, goalReached, null, this);
+        this.physics.add.overlap(player, goal, () => goalReached(this), null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
         this.physics.add.overlap(player, mold, () => playerDie(this));
         this.physics.add.overlap(player, key, keyCollect, null, this);
@@ -381,39 +397,50 @@
         keySound.play();
     }
 
-    function goalReached(){
+    function goalReached(scene){
         if (!goalOpen){
             return;
         }
-        platforms.clear(true, true);
-        mold.clear(true, true);
-        bluePlatforms.clear(true, true);
-        level += 1;
-        levelText.setText ('Level: ' + level);
-        player.setVelocityX(0);
-        player.setVelocityY(0);
-
-        // resets platform sizes to default
-        platSize.w1 = 300;
-        platSize.h1 = 25;
-        platSize.w2 = 300;
-        platSize.h2 = 25;
-        platSize.w3 = 300;
-        platSize.h3 = 25;
-        platSize.w4 = 300;
-        platSize.h4 = 25;
-        platSize.w5 = 300;
-        platSize.h5 = 25;
-        breakPlatSize.w1 = 80;
-        breakPlatSize.h1 = 25;
-        colorPlatSize.blueW1 = 80;
-        colorPlatSize.blueH1 = 25;
-
-        levelSetup();
-        leverFlipped();
-        safeSpotX = player.x;
-        safeSpotY = player.y;
+        goalOpen = false;
         goalSound.play();
+
+        lvlTran = true;
+
+        goalSign.setPosition(sky.x, sky.y);
+        scene.time.delayedCall(1300, () => {
+            goalSign.setPosition(0, -900);
+            platforms.clear(true, true);
+            mold.clear(true, true);
+            bluePlatforms.clear(true, true);
+            level += 1;
+            levelText.setText ('Level: ' + level);
+            player.setVelocityX(0);
+            player.setVelocityY(0);
+
+            // resets platform sizes to default
+            platSize.w1 = 300;
+            platSize.h1 = 25;
+            platSize.w2 = 300;
+            platSize.h2 = 25;
+            platSize.w3 = 300;
+            platSize.h3 = 25;
+            platSize.w4 = 300;
+            platSize.h4 = 25;
+            platSize.w5 = 300;
+            platSize.h5 = 25;
+            breakPlatSize.w1 = 80;
+            breakPlatSize.h1 = 25;
+            colorPlatSize.blueW1 = 80;
+            colorPlatSize.blueH1 = 25;
+
+            
+            levelSetup();
+            leverFlipped();
+
+            safeSpotX = player.x;
+            safeSpotY = player.y;
+            lvlTran = false;
+            })
 
     }
 
@@ -1054,10 +1081,16 @@
 
         // red flash
         // need to use "scene" because "this" is outside of function
-        scene.time.delayedCall(100, () => {
+        scene.time.delayedCall(0, () => {
             player.setTint('0xff5454');
         })
-        scene.time.delayedCall(100, () => {
+        scene.time.delayedCall(150, () => {
+            player.clearTint();
+        })
+        scene.time.delayedCall(300, () => {
+            player.setTint('0xff5454');
+        })
+        scene.time.delayedCall(450, () => {
             player.clearTint();
         })
         dying = false;
@@ -1076,6 +1109,11 @@
         else{
             player.setVelocityX(0);
             player.anims.play('front', true);
+        }
+
+        // LEVEL TRANSITION
+        if (lvlTran){
+            goalSign.anims.play('goalSign', true);
         }
 
         // SAFESPOT
