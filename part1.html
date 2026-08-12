@@ -89,8 +89,10 @@
         y6: -25,
         x7: 1015,
         y7: 395,
+        //top main monitor
         x8: -10,
-        y8: -258,
+        y8: -253,
+        // PC tower
         x9: 1595,
         y9: 100,
     }
@@ -182,7 +184,7 @@
         this.load.image('moldEdge', 'assets/moldEdge.png');
         this.load.spritesheet('bunny',
             'assets/bunny.png',
-            { frameWidth: 36, frameHeight: 32, spacing: 4}
+            { frameWidth: 62, frameHeight: 64 }
         );
         this.load.spritesheet('goal', 'assets/goal.png',
             { frameWidth: 32, frameHeight: 32 }
@@ -255,27 +257,27 @@
         leverIconU = this.physics.add.staticSprite(0, 0, 'leverIcon').setFrame(0).setDepth(5).setScale(0.75);
 
         // player
-        player = this.physics.add.sprite(1700, 1700, 'bunny').setScale(1.5);
+        player = this.physics.add.sprite(1700, 1700, 'bunny').setScale(0.75);
         player.setBounce(0);
         player.setCollideWorldBounds(true);
         player.setDepth(4);
 
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('bunny', { start: 0, end: 3 }),
+            frames: this.anims.generateFrameNumbers('bunny', { start: 0, end: 1 }),
             frameRate: 10,
             repeat: -1
         });
 
         this.anims.create({
             key: 'front',
-            frames: [ { key: 'bunny', frame: 4 } ],
+            frames: [ { key: 'bunny', frame: 2 } ],
             frameRate: 20
         });
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('bunny', { start: 5, end: 8 }),
+            frames: this.anims.generateFrameNumbers('bunny', { start: 3, end: 4 }),
             frameRate: 10,
             repeat: -1
         });
@@ -1082,9 +1084,9 @@
 
         // SHRINK
         if (extRules.shrink){
-            player.setScale(1);
+            player.setScale(0.5);
         } else {
-            player.setScale(1.5);
+            player.setScale(0.75);
         }
 
         // DOUBLE JUMP
