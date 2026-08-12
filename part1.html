@@ -17,7 +17,7 @@
     let cJump = true;
     let airTime = 0;
     // level 0 for testing
-    let level = 14;
+    let level = 15;
     let levelText;
     let cursorText;
     let safeSpotX;
@@ -309,7 +309,7 @@
 
     function breakPlat1Check(){
         // prevents breaking from below
-        if (player.y >= (breakPlat1.y - breakPlat1.height/2 - player.height/2)){
+        if (player.y >= (breakPlat1.y - breakPlat1.height/2)){
             return;
         }
         breakPlat1Touched = true;
@@ -823,9 +823,9 @@
                 platSize.h1 = 25;
                 platPos.x1 = 335;
                 platPos.y1 = -80;
-                platSize.w2 = 140;
+                platSize.w2 = 148;
                 platSize.h2 = 25;
-                platPos.x2 = 80;
+                platPos.x2 = 84;
                 platPos.y2 = -80;
                 platSize.h3 = 25;
                 platSize.w3 = 500;
@@ -837,14 +837,14 @@
                 platPos.y4 = -168;
                 mushPos.x = -60;
                 mushPos.y = 193;
-                keyPos.x = 175;
+                keyPos.x = 180;
                 keyPos.y = -20;
                 goalOpen = false;
                 goalPos.x = -200;
                 goalPos.y = -200;
                 breakPlatSize.h1 = 25;
                 breakPlatSize.w1 = 80;
-                breakPlatPos.x1 = 175;
+                breakPlatPos.x1 = 180;
                 breakPlatPos.y1 = -55;
                 leverPos.x = 1050;
                 leverPos.y = -220;
@@ -854,41 +854,41 @@
             case 15:
                 playerPos.x = 180;
                 playerPos.y = 20;
-                platSize.h1 = 25;
-                platSize.w1 = 150;
-                platPos.x1 = 180;
-                platPos.y1 = 70;
+                platSize.h1 = 100;
+                platSize.w1 = 70;
+                platPos.x1 = 690;
+                platPos.y1 = 335;
                 platSize.h2 = 50;
-                platSize.w2 = 600;
+                platSize.w2 = 620;
                 platPos.x2 = 160;
-                platPos.y2 = 190;
-                platSize.h3 = 50;
-                platSize.w3 = 280;
-                platPos.x3 = -325;
-                platPos.y3 = 150;
+                platPos.y2 = 240;
+                platSize.h3 = 25;
+                platSize.w3 = 150;
+                platPos.x3 = 180;
+                platPos.y3 = 120;
                 platSize.h4 = 200;
-                platSize.w4 = 25;
+                platSize.w4 = 50;
                 platPos.x4 = -250;
                 platPos.y4 = -10;
-                platSize.h5 = 25;
-                platSize.w5 = 150;
-                platPos.x5 = -270;
-                platPos.y5 = -100
+                platSize.h5 = 50;
+                platSize.w5 = 280;
+                platPos.x5 = -325;
+                platPos.y5 = 150;
                 mushPos.x = -420;
                 mushPos.y = 110;
-                keyPos.x = -270;
+                keyPos.x = -250;
                 keyPos.y = -150;
                 colorPlatSize.blueH1 = 100;
                 colorPlatSize.blueW1 = 250;
-                colorPlatPos.blueX1 = 1025;
+                colorPlatPos.blueX1 = 1125;
                 colorPlatPos.blueY1 = 332;
                 goalOpen = false;
-                goalPos.x = 1025;
+                goalPos.x = 1125;
                 goalPos.y = 135;
                 breakPlatSize.h1 = 25;
-                breakPlatSize.w1 = 150;
+                breakPlatSize.w1 = 160;
                 breakPlatPos.x1 = 400;
-                breakPlatPos.y1 = -30;
+                breakPlatPos.y1 = 40;
                 leverPos.x = 1050;
                 leverPos.y = -220;
                 leverTypeU = 1;
@@ -936,12 +936,13 @@
         colorPlatCheck();
 
         // switches depths for specific levels (mostly issue with monitor 2)
-        if (level === 13){
+        if (level === 13 || level === 15){
             plat1.setDepth(3);
         }
         else{
             plat1.setDepth(0);
         }
+        
 
         // mold
         let moldAtexture3 = 'mold';
@@ -1169,7 +1170,7 @@
         if (Phaser.Input.Keyboard.JustDown(pKey)){
             levelSetup();
             leverFlipped();
-            leverDir === 'up';
+            leverDir = 'up';
         }
 
         // TESTS
