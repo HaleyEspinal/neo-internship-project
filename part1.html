@@ -17,9 +17,10 @@
     let cJump = true;
     let airTime = 0;
     // level 0 for testing
-    let level = 15;
+    let level = 1;
     let levelText;
     let cursorText;
+    let resetLvlText;
     let safeSpotX;
     let safeSpotY;
     let moldChainA = 3;
@@ -170,6 +171,7 @@
 
     function preload ()
     {
+        // PRELOAD IMAGES
         this.load.spritesheet('deskBkr', 'assets/deskBkr.png',
             { frameWidth: 1920, frameHeight: 1080}
         );
@@ -196,7 +198,10 @@
             {frameWidth: 128, frameHeight: 128}
         );
         this.load.image('key', 'assets/key.png');
+        this.load.image('xButton', 'assets/xbutton.png');
+        this.load.image('yButton', 'assets/ybutton.png');
 
+        // PRELOAD AUDIO
         this.load.audio('jump', 'sound/jump.mp3');
         this.load.audio('die', 'sound/die.mp3');
         this.load.audio('goal', 'sound/goal.mp3');
@@ -223,6 +228,10 @@
         // this.add.image(0, 0, 'projRef').setOrigin(0,0).setScale(2.16); 
         sky = this.add.image(650, 932, 'sky').setDisplaySize(936, 487);
         // sky.setTint('0xffffff').setAlpha(0.5);
+
+        //Button icons
+        yButton = this.add.image(sky.x + 248, sky.y - 183, 'yButton').setScale(0.8);
+        xButton = this.add.image(0, -900, 'xButton').setScale(0.8).setDepth(5);
 
         // 2nd monitor background
         deskBkr = this.add.image(sky.x + 1025, sky.y + 198, 'deskBkr').setScale(0.43).setDepth(2).setFrame(0);
@@ -300,6 +309,7 @@
         // text
         testText = this.add.text(16, 20, 'Blue: ', {fontSize: '32px', fill: '#ffffff'})
         levelText = this.add.text(sky.x + sky.width/2 - 130, sky.y - sky.height/2 + 70, 'Level: 1', {fontSize: '32px', fill: '#000000'})
+        resetLvlText = this.add.text(sky.x + sky.width/2 - 130, sky.y - sky.height/2 + 105, 'Reset Level', {fontSize: '24px', fill: '#000000'})
         cursorText = this.add.text(16, 80, 'Mouse: ', {fontSize: '32px', fill: '#ffffff'})
         
 
@@ -1152,6 +1162,10 @@
 
         if (leverInt === true){
             lever.setTint('0xffe799');
+            xButton.setPosition(player.x, player.y - player.height/2 - 10);
+        }
+        else{
+            xButton.setPosition(0, -900);
         }
 
         if (leverInt === true && Phaser.Input.Keyboard.JustDown(enterKey)){
