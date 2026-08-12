@@ -13,11 +13,12 @@
 <body>
 
 <script type="text/javascript">
-    var gameOver = false;
     let cJump = true;
     let airTime = 0;
+    let flashCount = 0;
+    let dying = false;
     // level 0 for testing
-    let level = 1;
+    let level = 2;
     let levelText;
     let cursorText;
     let resetLvlText;
@@ -297,7 +298,7 @@
         blueCollider = this.physics.add.collider(player, bluePlatforms);
         this.physics.add.overlap(player, goal, goalReached, null, this);
         this.physics.add.collider(player, mushroom, springUp, null, this);
-        this.physics.add.overlap(player, mold, moldTouch, null, this);
+        this.physics.add.overlap(player, mold, () => playerDie(this));
         this.physics.add.overlap(player, key, keyCollect, null, this);
 
         // keyboard inputs
@@ -1039,11 +1040,27 @@
         springSound.play();
     }
 
-    function moldTouch(){
-        player.x = safeSpotX;
-        player.y = (safeSpotY-25);
+    function playerDie(scene){
+        dying = true;
+        if (safeSpotX < player.x){
+            player.x = safeSpotX - 50;
+        }
+        else{
+        player.x = safeSpotX + 50;
+        }    
+        player.y = (safeSpotY-15);
         player.setVelocityY(0);
         dieSound.play();
+
+        // red flash
+        // need to use "scene" because "this" is outside of function
+        scene.time.delayedCall(100, () => {
+            player.setTint('0xff5454');
+        })
+        scene.time.delayedCall(100, () => {
+            player.clearTint();
+        })
+        dying = false;
     }
 
     function update(){
@@ -1063,7 +1080,7 @@
 
         // SAFESPOT
         // safespot only taken if player is far enough from mold edge
-        if (player.body.touching.down && ((player.x <= (moldPos.x1 - 12 - 100)) || (player.x >= (rightMold + 12 + 100))) && !breakPlat1Touched && !mushTouched){
+        if (((player.x <= (sky.x + moldPos.x1 - 12 - 50)) || (player.x >= (sky.x + rightMold + 12 + 50))) && !breakPlat1Touched && !mushTouched && player.body.touching.down && !dying){
             safeSpotX = player.x;
             safeSpotY = player.y;
         }
@@ -1071,10 +1088,7 @@
         // FALLS IN PIT
         if (player.y >= (sky.y + sky.displayHeight/2) && player.x <= (sky.x + sky.displayWidth/2) && player.x >= (sky.x - sky.displayWidth/2) 
             || player.y >= (sky.y + sky.displayHeight/2 + 200)){
-            player.x = safeSpotX;
-            player.y = (safeSpotY-5);
-            player.setVelocityY(0);
-            dieSound.play();
+            playerDie(this);
         }
      
         // JUMP
