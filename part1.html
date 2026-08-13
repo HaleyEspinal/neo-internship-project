@@ -1189,8 +1189,8 @@
         if (!onBreakPlat && breakPlat1Touched && 
         (player.y <= (breakPlat1.y - breakPlat1.height/2 - 30) || 
         player.y >= (breakPlat1.y + breakPlat1.width/2) ||
-        player.x >= (breakPlat1.x + breakPlat1.width/2) || 
-        player.x <= (breakPlat1.x - breakPlat1.width/2)
+        player.x >= (breakPlat1.x + breakPlat1.width/2 + 50) || 
+        player.x <= (breakPlat1.x - breakPlat1.width/2 - 50)
         )
         ){
             breakPlat1.disableBody(true,true);
